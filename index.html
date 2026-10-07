@@ -1,0 +1,1429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Propelogo Team Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<script>
+try { if (localStorage.getItem("pg-team-guide-theme") === "dark") document.documentElement.setAttribute("data-gtheme", "dark"); } catch (e) {}
+</script>
+<style>
+/* Same system as the realtor field guide: centered 1180px column, chapters = copy rail + annotated frame, numbered pins tied to a legend. */
+:root {
+  --bg: #ffffff; --ground: #f4f6fa; --ink: #0c1424; --body: #414b5e; --muted: #606a7d;
+  --line: #e1e6ef; --line-soft: #eaeef5;
+  --cobalt: #2340f5; --cobalt-fill: #2340f5; --cobalt-soft: #eef1ff; --on-cobalt: #ffffff;
+  --chalk: #c8f03c; --chalk-soft: #eefac0; --chalk-ink: #3d4b08;
+  --data: #0e7c86; --data-soft: #e6f5f6;
+  --ok: #187a42; --ok-soft: #e7f6ec; --warn: #a35f00; --warn-soft: #fdf3e1; --err: #d1342b; --err-soft: #fdecea;
+  --frame: #ffffff; --term: #0c1424; --term-ink: #dfe5f2; --term-muted: #7d89a3;
+  --shadow: 0 1px 2px rgba(12,20,36,.06), 0 12px 32px -8px rgba(12,20,36,.16);
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "Geist", -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+:root[data-gtheme="dark"] {
+  --bg: #0b1120; --ground: #111a2c; --ink: #eef1f7; --body: #c3cada; --muted: #8f9ab0;
+  --line: #232d42; --line-soft: #1b2438; --cobalt: #8b9aff; --cobalt-fill: #2340f5; --cobalt-soft: #1b2352; --on-cobalt: #ffffff;
+  --chalk: #c8f03c; --chalk-soft: #2a3310; --chalk-ink: #d9f57a; --data: #4fc3cc; --data-soft: #0f2d31;
+  --ok: #4cc47e; --ok-soft: #12301f; --warn: #e0a33a; --warn-soft: #33260f; --err: #ff6b61; --err-soft: #3a1714;
+  --frame: #182135; --term: #070b15; --shadow: 0 1px 2px rgba(0,0,0,.4), 0 16px 40px -10px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+body, .bar, .card, .frame, .role, .step, .legend li, .rhythm li, .node { transition: background-color .45s ease, color .45s ease, border-color .45s ease; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--body); font-family: var(--font-sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 24px; }
+@media (max-width: 600px) { .wrap { padding-inline: 16px; } }
+h1, h2, h3 { font-family: var(--font-display); color: var(--ink); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--cobalt); }
+code, .mono { font-family: var(--font-mono); font-size: .92em; }
+code { background: var(--ground); border: 1px solid var(--line-soft); border-radius: 5px; padding: 1px 5px; color: var(--ink); }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; border-radius: 4px; }
+
+/* top bar */
+.bar { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: center; gap: 20px; height: 56px; }
+.bar::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--progress, 0) * 100%); background: linear-gradient(90deg, var(--cobalt-fill), var(--chalk)); transition: width .12s linear; }
+.logo { display: flex; align-items: center; gap: 8px; color: var(--ink); font-family: var(--font-display); font-size: 21px; text-decoration: none; flex-shrink: 0; }
+.logo svg { width: 22px; height: 22px; }
+.logo small { font: 500 11px var(--font-mono); color: var(--cobalt); background: var(--cobalt-soft); border-radius: 999px; padding: 2px 8px; letter-spacing: .04em; }
+.bar nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.bar nav::-webkit-scrollbar { display: none; }
+.bar nav a { font-size: 13.5px; color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
+.bar nav a:hover, .bar nav a.on { color: var(--ink); background: var(--ground); }
+.themebtn { margin-left: auto; flex-shrink: 0; display: inline-flex; align-items: center; gap: 2px; padding: 3px; border-radius: 999px; border: 1px solid var(--line); background: var(--ground); }
+.themebtn button { border: 0; background: none; color: var(--muted); width: 30px; height: 26px; border-radius: 999px; display: grid; place-items: center; cursor: pointer; transition: background .3s, color .3s; }
+.themebtn button svg { width: 15px; height: 15px; }
+.themebtn button[aria-pressed="true"] { background: var(--cobalt-fill); color: #fff; }
+
+/* hero */
+.hero { padding-block: 72px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 48px; align-items: center; }
+.hero h1 { font-size: clamp(42px, 6vw, 72px); line-height: 1.02; }
+.hero h1 em { font-style: italic; color: var(--cobalt); }
+.hero .lede { margin-top: 22px; font-size: 18px; max-width: 34em; }
+.hero .meta { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 13px; color: var(--ink); background: var(--bg); text-decoration: none; }
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--chalk); box-shadow: 0 0 0 1px var(--chalk-ink); }
+@keyframes rise { from { transform: translateY(18px); } to { transform: none; } }
+.hero h1, .hero .lede, .hero .meta { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+.hero .lede { animation-delay: .08s; } .hero .meta { animation-delay: .16s; }
+.stack { position: relative; aspect-ratio: 16 / 11; perspective: 1600px; max-width: 100%; }
+.stack figure { position: absolute; margin: 0; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); background: var(--frame); transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.stack .s1 { width: 82%; left: 0; top: 0; transform: rotateY(9deg) rotateX(4deg) translateZ(-40px); animation: fly1 1.3s cubic-bezier(.2,.7,.2,1) backwards; }
+.stack .s2 { width: 62%; right: 0; top: 34%; transform: rotateY(-6deg) rotateX(3deg) translateZ(20px); animation: fly2 1.3s .12s cubic-bezier(.2,.7,.2,1) backwards; }
+.stack .s3 { width: 46%; left: 8%; bottom: 0; transform: rotateY(6deg) translateZ(60px); animation: fly3 1.3s .24s cubic-bezier(.2,.7,.2,1) backwards; }
+.stack:hover .s1 { transform: rotateY(4deg) rotateX(2deg) translateZ(-40px) translateX(-8px); }
+.stack:hover .s2 { transform: rotateY(-2deg) rotateX(1deg) translateZ(20px) translateX(8px); }
+@keyframes fly1 { from { transform: rotateY(22deg) rotateX(8deg) translateZ(-160px) translateX(-30px); } }
+@keyframes fly2 { from { transform: rotateY(-20deg) rotateX(6deg) translateZ(-120px) translateX(40px); } }
+@keyframes fly3 { from { transform: rotateY(18deg) translateZ(-80px) translateY(40px); } }
+.stack .tag { position: absolute; z-index: 3; font-family: var(--font-mono); font-size: 11.5px; padding: 4px 9px; border-radius: 999px; background: var(--cobalt-fill); color: #fff; white-space: nowrap; animation: bob 4s ease-in-out infinite; }
+.stack .tag:nth-of-type(2) { animation-delay: -1.3s; } .stack .tag:nth-of-type(3) { animation-delay: -2.6s; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.mini-arch { padding: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: var(--ground); }
+.mini-arch div { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 10px; font: 500 11px/1.35 var(--font-mono); color: var(--ink); }
+.mini-arch div span { display: block; font-weight: 400; color: var(--muted); margin-top: 3px; }
+.mini-arch .wide { grid-column: 1 / -1; background: var(--cobalt-soft); border-color: color-mix(in srgb, var(--cobalt) 30%, transparent); color: var(--cobalt); }
+.mini-pr { padding: 16px; }
+.mini-pr b { display: block; font: 500 13px var(--font-sans); color: var(--ink); }
+.mini-pr span { display: block; font: 11.5px var(--font-mono); color: var(--muted); margin-top: 4px; }
+.mini-pr .merged { margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; font: 500 11.5px var(--font-mono); color: var(--ok); background: var(--ok-soft); padding: 4px 10px; border-radius: 999px; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-block: 44px 24px; gap: 36px; } }
+
+/* journey rail */
+.rail { margin-block: 8px 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--ground); padding: 20px; overflow-x: auto; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(9, minmax(118px, 1fr)); position: relative; min-width: 1060px; }
+.rail li { position: relative; padding-right: 12px; }
+.rail li::before { content: ""; position: absolute; top: 15px; left: 32px; right: 0; height: 2px; background: var(--line); }
+.rail li::after { content: ""; position: absolute; top: 15px; left: 32px; height: 2px; width: 0; background: var(--cobalt); transition: width .6s ease; }
+.rail li.passed::after { width: calc(100% - 32px); }
+.rail li:last-child::before, .rail li:last-child::after { display: none; }
+.rail a { display: block; text-decoration: none; color: inherit; }
+.rail .n { position: relative; z-index: 1; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); border: 1.5px solid var(--cobalt); color: var(--cobalt); font: 500 13px var(--font-mono); transition: background .2s, color .2s; }
+.rail a:hover .n, .rail li.reached .n { background: var(--cobalt-fill); color: var(--on-cobalt); border-color: var(--cobalt-fill); }
+.rail .t { margin-top: 10px; font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.3; }
+.rail .d { font-size: 12.5px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+
+/* chapters */
+.chapter { padding-block: 72px; border-top: 1px solid var(--line); scroll-margin-top: 56px; }
+.chapter-head { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; align-items: start; margin-bottom: 32px; }
+.chapter-num { font-family: var(--font-display); font-size: 88px; line-height: .8; color: var(--cobalt); font-style: italic; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+.pre .chapter-num { transform: translateX(-24px); }
+.chapter-head h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.08; margin-top: 8px; }
+.chapter-head p { margin-top: 14px; font-size: 17px; max-width: 46em; }
+@media (max-width: 700px) { .chapter-head { grid-template-columns: 1fr; gap: 6px; } .chapter-num { font-size: 56px; } .chapter { padding-block: 52px; } }
+
+/* frame + pins + legend */
+.shot { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
+@media (max-width: 980px) { .shot { grid-template-columns: 1fr; } }
+.frame { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--frame); box-shadow: var(--shadow); min-width: 0; }
+.frame .chrome { height: 34px; display: flex; align-items: center; gap: 7px; padding-inline: 12px; border-bottom: 1px solid var(--line); background: var(--ground); }
+.frame .chrome i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: block; flex-shrink: 0; }
+.frame .chrome .url { margin-left: 10px; flex: 1; min-width: 0; font: 11.5px var(--font-mono); color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 2px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.frame .chrome a.open { font: 500 11.5px var(--font-sans); color: var(--muted); text-decoration: none; white-space: nowrap; }
+.frame .chrome a.open:hover { color: var(--cobalt); }
+.pin { position: absolute; transform: translate(-50%, -50%); width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; background: var(--cobalt-fill); color: #fff; font: 600 13px/1 var(--font-mono); display: grid; place-items: center; cursor: pointer; box-shadow: 0 2px 8px rgba(12,20,36,.35); padding: 0; transition: transform .18s, background .18s; z-index: 4; }
+.pin::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 2px solid var(--chalk); opacity: 0; }
+.pin:hover, .pin.on { transform: translate(-50%, -50%) scale(1.15); background: var(--ink); }
+:root[data-gtheme="dark"] .pin:hover, :root[data-gtheme="dark"] .pin.on { background: #fff; color: #0c1424; }
+.pin.on::after { opacity: 1; animation: ring 1.6s ease-out infinite; }
+@keyframes ring { from { transform: scale(.8); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.legend li { position: relative; overflow: hidden; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; padding: 10px 12px; border-radius: 10px; cursor: pointer; transition: background .15s; }
+.legend li:hover, .legend li.on { background: var(--ground); }
+.legend li.on { box-shadow: inset 0 0 0 1px var(--line); }
+.legend li.on::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--cobalt); border-radius: 3px; }
+.legend .k { width: 26px; height: 26px; border-radius: 50%; background: var(--cobalt-soft); color: var(--cobalt); font: 500 12.5px/26px var(--font-mono); text-align: center; }
+.legend li.on .k { background: var(--cobalt-fill); color: var(--on-cobalt); }
+.legend b { display: block; color: var(--ink); font-weight: 500; font-size: 15px; line-height: 1.35; }
+.legend span { display: block; font-size: 14px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
+.legend.plain li { cursor: default; }
+
+/* architecture diagram */
+.arch-scroll { overflow-x: auto; }
+.arch { position: relative; aspect-ratio: 16 / 11.5; min-width: 720px; background: var(--ground); background-image: radial-gradient(color-mix(in srgb, var(--muted) 22%, transparent) 1px, transparent 1px); background-size: 18px 18px; }
+.arch svg.wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.arch svg.wires path { fill: none; stroke: var(--line); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.arch svg.wires path.flow { stroke: var(--cobalt); stroke-dasharray: 6 8; animation: dash 1.4s linear infinite; opacity: .7; }
+@keyframes dash { to { stroke-dashoffset: -28; } }
+.node { position: absolute; border: 1px solid var(--line); background: var(--bg); border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 2px rgba(12,20,36,.05); transition: border-color .3s, box-shadow .3s; }
+.node.on { border-color: var(--cobalt); box-shadow: 0 0 0 3px var(--cobalt-soft); }
+.node .eyebrow { font-size: 10.5px; }
+.node b { display: block; font: 400 19px/1.15 var(--font-display); color: var(--ink); margin-top: 3px; }
+.node span { display: block; font: 11.5px/1.45 var(--font-mono); color: var(--muted); margin-top: 5px; }
+.node.db { border-style: dashed; }
+.node.ro b::after { content: "read-only"; margin-left: 8px; font: 500 10px var(--font-mono); color: var(--warn); background: var(--warn-soft); padding: 2px 6px; border-radius: 999px; vertical-align: middle; }
+.node .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.node .tags i { font-style: normal; font: 10.5px var(--font-mono); color: var(--ink); background: var(--ground); border: 1px solid var(--line-soft); border-radius: 5px; padding: 2px 6px; }
+.lane { position: absolute; display: flex; align-items: stretch; gap: 0; }
+.lane .node { position: relative; flex: 1; }
+.lane .arrow { width: 26px; display: grid; place-items: center; color: var(--muted); font: 14px var(--font-mono); flex-shrink: 0; }
+
+/* terminal */
+.term { background: var(--term); color: var(--term-ink); font: 13px/1.75 var(--font-mono); padding: 18px 20px; overflow-x: auto; }
+.term .ln { display: flex; gap: 10px; align-items: baseline; white-space: pre; }
+.term .ps { color: var(--chalk); user-select: none; }
+.term .c { color: var(--term-muted); }
+.term .out { color: var(--term-muted); white-space: pre; }
+.term .ok { color: #4cc47e; }
+.term .copy { margin-left: auto; border: 1px solid #2a3550; background: transparent; color: var(--term-muted); font: 11px var(--font-mono); border-radius: 5px; padding: 0 7px; cursor: pointer; opacity: 0; transition: opacity .2s; }
+.term .ln:hover .copy { opacity: 1; }
+.term .copy.done { color: #4cc47e; border-color: #4cc47e; opacity: 1; }
+
+/* tabs */
+.tabrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 16px; }
+.tabhint { font: 500 12px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--cobalt); display: inline-flex; align-items: center; gap: 8px; }
+.tabhint::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--chalk); box-shadow: 0 0 0 1px var(--chalk-ink); }
+.tabs { position: relative; display: inline-flex; gap: 4px; padding: 5px; border-radius: 12px; background: var(--cobalt-soft); border: 1.5px solid color-mix(in srgb, var(--cobalt) 35%, transparent); flex-wrap: wrap; max-width: 100%; }
+.tabs .tpill { position: absolute; z-index: 0; border-radius: 8px; background: var(--cobalt-fill); box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--cobalt-fill) 70%, transparent); transition: left .45s cubic-bezier(.2,.7,.2,1), top .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1), height .45s; pointer-events: none; }
+.tabs button { position: relative; z-index: 1; border: 0; background: none; font: 500 14.5px var(--font-sans); color: var(--ink); padding: 9px 16px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: color .25s; }
+.tabs button .tn { font: 500 11px/1 var(--font-mono); width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; background: var(--bg); color: var(--cobalt); border: 1px solid color-mix(in srgb, var(--cobalt) 30%, transparent); }
+.tabs button[aria-selected="true"] { color: #fff; }
+.tabs button[aria-selected="true"] .tn { background: rgba(255,255,255,.2); color: #fff; border-color: rgba(255,255,255,.35); }
+.tabpanel[hidden] { display: none !important; }
+.tabnote { margin-top: 18px; font-size: 15px; max-width: 60em; }
+
+/* cards, notes, grids */
+.note { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 16px 18px; border-radius: 12px; background: var(--chalk-soft); color: var(--chalk-ink); font-size: 14.5px; margin-top: 24px; }
+.note svg { width: 20px; height: 20px; margin-top: 2px; }
+.note a { color: inherit; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+.card { border: 1px solid var(--line); border-radius: 14px; background: var(--bg); padding: 22px; min-width: 0; }
+.card h3 { font-size: 22px; line-height: 1.2; margin-top: 8px; }
+.card p { margin-top: 8px; font-size: 14.5px; }
+.card .links { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+.card .links a { font: 500 12.5px var(--font-mono); text-decoration: none; padding: 4px 10px; border-radius: 999px; background: var(--cobalt-soft); color: var(--cobalt); }
+.card .links a:hover { background: var(--cobalt-fill); color: var(--on-cobalt); }
+a.card { text-decoration: none; color: inherit; display: block; transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s, border-color .35s; }
+a.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--cobalt); }
+.card .order { font: 400 40px/1 var(--font-display); font-style: italic; color: var(--cobalt); }
+.card.first { border-color: var(--cobalt); box-shadow: 0 0 0 3px var(--cobalt-soft); }
+
+/* access flow */
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 28px; }
+@media (max-width: 860px) { .flow { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .flow { grid-template-columns: 1fr; } }
+.flow .step { position: relative; border: 1px solid var(--line); border-radius: 14px; padding: 18px; background: var(--bg); transition: border-color .5s, transform .5s; }
+.flow .step.lit { border-color: var(--cobalt); transform: translateY(-3px); }
+.flow .step .ico { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--cobalt-soft); color: var(--cobalt); font: 500 13px var(--font-mono); }
+.flow .step .ico svg { width: 18px; height: 18px; }
+.flow .step b { display: block; margin-top: 12px; color: var(--ink); font-weight: 500; }
+.flow .step span { display: block; font-size: 13.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.flow .step .who { display: inline-block; margin-top: 10px; font: 500 11px var(--font-mono); color: var(--cobalt); background: var(--cobalt-soft); padding: 2px 8px; border-radius: 999px; }
+.flow .step.wait .ico { background: var(--warn-soft); color: var(--warn); }
+.flow .step.go .ico { background: var(--ok-soft); color: var(--ok); }
+
+/* environment ladder */
+.ladder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+@media (max-width: 760px) { .ladder { grid-template-columns: 1fr; } }
+.ladder > div { position: relative; overflow: hidden; padding: 22px; border-right: 1px solid var(--line); background: var(--bg); }
+.ladder > div:last-child { border-right: 0; }
+@media (max-width: 760px) { .ladder > div { border-right: 0; border-bottom: 1px solid var(--line); } .ladder > div:last-child { border-bottom: 0; } }
+.ladder > div::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--cobalt) 9%, transparent), transparent); transform: translateX(-100%); animation: sweep 6s ease-in-out infinite; pointer-events: none; }
+.ladder > div:nth-child(2)::before { animation-delay: 2s; } .ladder > div:nth-child(3)::before { animation-delay: 4s; }
+@keyframes sweep { 0% { transform: translateX(-100%); } 30%, 100% { transform: translateX(100%); } }
+.ladder .lvl { display: inline-block; font: 12px var(--font-mono); padding: 3px 10px; border-radius: 6px; border: 1px solid var(--line); color: var(--ink); }
+.ladder > div:nth-child(3) .lvl { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.ladder b { display: block; margin-top: 12px; color: var(--ink); font-weight: 500; font-size: 17px; }
+.ladder dl { margin: 12px 0 0; display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 6px 10px; font-size: 13.5px; }
+.ladder dt { font: 11px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding-top: 2px; }
+.ladder dd { margin: 0; color: var(--ink); font-family: var(--font-mono); font-size: 12.5px; word-break: break-word; }
+.ladder p { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+
+/* pipeline (a change travelling to prod) */
+.pipeline { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+@media (max-width: 700px) { .pipeline { grid-template-columns: 1fr; } }
+.pipeline div { position: relative; border-top: 3px solid var(--line); padding-top: 12px; transition: border-color .4s; }
+.pipeline div.done { border-color: var(--cobalt); }
+.pipeline div.at { border-color: var(--chalk-ink); }
+.pipeline div.at b { color: var(--cobalt); }
+.pipeline b { display: block; font: 500 12px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
+.pipeline span { display: block; font-size: 13.5px; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+.pipeline .token { position: absolute; top: -9px; width: 14px; height: 14px; border-radius: 50%; background: var(--chalk); border: 2px solid var(--ink); left: 0; transition: left .9s cubic-bezier(.45,0,.2,1); z-index: 1; padding: 0; border-top-width: 2px; }
+@media (max-width: 700px) { .pipeline .token { display: none; } }
+
+/* ticket template card (mirrors the call-script card) */
+.script { margin-top: 28px; border-radius: 16px; background: var(--cobalt-soft); border: 1.5px solid color-mix(in srgb, var(--cobalt) 25%, transparent); padding: 30px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+@media (max-width: 860px) { .script { grid-template-columns: 1fr; padding: 22px; } }
+.script .eyebrow { color: var(--cobalt); }
+.script blockquote { margin: 12px 0 0; font-family: var(--font-display); font-size: 22px; line-height: 1.45; color: var(--ink); }
+.script blockquote mark { background: var(--chalk); color: #0c1424; padding: 0 3px; border-radius: 3px; }
+.script ul { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 15px; }
+.script ul li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; }
+.script ul li::before { content: ""; width: 15px; height: 15px; margin-top: 4px; border-radius: 4px; border: 1.5px solid var(--cobalt); background: var(--bg); }
+.script .ask { margin-top: 18px; padding: 14px 16px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); font-family: var(--font-display); font-size: 19px; color: var(--cobalt); }
+
+/* owners (role cards) */
+.role-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1000px) { .role-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .role-grid { grid-template-columns: 1fr; } }
+.role { position: relative; border: 1px solid var(--line); border-radius: 16px; background: var(--bg); padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; overflow: hidden; transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+.role::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--rc); transform: scaleX(.18); transform-origin: left; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.role:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.role:hover::before { transform: scaleX(1); }
+.role header { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.role .av { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font: 500 13px var(--font-mono); color: var(--bg); background: var(--rc); }
+.role header b { display: block; color: var(--ink); font: 400 22px/1.1 var(--font-display); }
+.role header span { display: block; font-size: 13px; color: var(--muted); }
+.role header em { font-style: normal; font: 500 11px var(--font-mono); color: var(--cobalt); background: var(--cobalt-soft); padding: 3px 8px; border-radius: 999px; }
+.minibar { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border-radius: 10px; background: var(--ground); border: 1px solid var(--line-soft); }
+.minibar i { font-style: normal; font: 11px var(--font-mono); color: var(--muted); padding: 3px 7px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line-soft); }
+.minibar i.on { color: var(--on-cobalt); background: var(--cobalt-fill); border-color: var(--cobalt-fill); }
+.role ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; font-size: 13.5px; line-height: 1.45; flex: 1; }
+.role li { position: relative; padding-left: 24px; }
+.role li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--ok); font-weight: 600; }
+.role li.n { color: var(--muted); }
+.role li.n::before { content: "—"; color: var(--muted); }
+.role footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line-soft); padding-top: 10px; }
+
+/* guardrail pills */
+.dispo { display: flex; flex-direction: column; gap: 20px; }
+.dispo .eyebrow { margin-bottom: 8px; display: block; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { font-size: 13.5px; padding: 5px 12px; border-radius: 999px; font-weight: 500; transition: transform .3s, box-shadow .3s; }
+.pill.g { background: var(--ok-soft); color: var(--ok); }
+.pill.o { background: var(--warn-soft); color: var(--warn); }
+.pill.r { background: var(--err-soft); color: var(--err); }
+.pill.blink { transform: translateY(-2px); box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 22%, transparent); }
+.tcpa { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.tcpa div { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; align-items: start; padding: 12px 14px; border-radius: 10px; background: var(--ground); font-size: 14px; }
+.tcpa div em { font-style: normal; font: 500 11px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 999px; text-align: center; }
+.tcpa .y em { background: var(--ok-soft); color: var(--ok); }
+.tcpa .x em { background: var(--err-soft); color: var(--err); }
+
+/* week-one checklist */
+.rhythm { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.rhythm li { display: grid; grid-template-columns: 92px 28px minmax(0, 1fr); gap: 16px; padding: 18px 22px; border-bottom: 1px solid var(--line); background: var(--bg); align-items: start; }
+.rhythm li:last-child { border-bottom: 0; }
+.rhythm .when { font: 12.5px var(--font-mono); color: var(--muted); padding-top: 3px; }
+.rhythm input { width: 20px; height: 20px; accent-color: var(--cobalt-fill); margin: 2px 0 0; cursor: pointer; }
+.rhythm label { cursor: pointer; }
+.rhythm label b { display: block; color: var(--ink); font-weight: 500; }
+.rhythm label span { display: block; font-size: 14px; color: var(--muted); margin-top: 2px; }
+.rhythm li.done label b { text-decoration: line-through; color: var(--muted); }
+@media (max-width: 600px) { .rhythm li { grid-template-columns: 28px minmax(0, 1fr); padding: 16px; } .rhythm .when { grid-column: 2; order: -1; padding: 0; } .rhythm input { grid-row: 1 / span 2; } }
+.progress-line { margin-top: 14px; font: 12.5px var(--font-mono); color: var(--muted); }
+.progress-line b { color: var(--cobalt); font-weight: 500; }
+
+/* glossary */
+.gloss { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); border-top: 1px solid var(--line); margin: 20px 0 0; }
+.gloss div { padding: 18px 20px 18px 0; border-bottom: 1px solid var(--line); }
+.gloss dt { font-family: var(--font-display); font-size: 20px; color: var(--ink); }
+.gloss dd { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
+
+footer.site { padding-block: 48px 64px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
+footer.site .wrap { display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; }
+
+/* first-visit theme question */
+.themeask { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(6px); }
+.themeask[hidden] { display: none; }
+.themeask .box { width: 100%; max-width: 520px; background: var(--bg); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 28px; animation: askin .5s cubic-bezier(.2,.7,.2,1); }
+@keyframes askin { from { transform: translateY(16px) scale(.98); } }
+.themeask h2 { font-size: 30px; margin-top: 8px; }
+.themeask p { margin-top: 6px; font-size: 15px; color: var(--muted); }
+.themeask .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.themeask .opt { border: 1.5px solid var(--line); border-radius: 14px; padding: 10px; background: var(--ground); cursor: pointer; text-align: left; font: inherit; color: var(--ink); transition: border-color .25s, transform .25s, box-shadow .25s; }
+.themeask .opt:hover, .themeask .opt:focus-visible { border-color: var(--cobalt); transform: translateY(-2px); box-shadow: 0 0 0 3px var(--cobalt-soft); }
+.themeask .prev { height: 92px; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px; border: 1px solid rgba(12,20,36,.12); }
+.themeask .prev i { display: block; height: 8px; border-radius: 4px; }
+.themeask .prev .h { width: 62%; height: 12px; } .themeask .prev .b { width: 86%; } .themeask .prev .c { width: 44%; }
+.themeask .prev .k { width: 34%; height: 16px; border-radius: 6px; margin-top: auto; background: #2340f5; }
+.themeask .light .prev { background: #fff; } .themeask .light .prev .h { background: #0c1424; } .themeask .light .prev .b, .themeask .light .prev .c { background: #e1e6ef; }
+.themeask .dark .prev { background: #0b1120; border-color: #232d42; } .themeask .dark .prev .h { background: #eef1f7; } .themeask .dark .prev .b, .themeask .dark .prev .c { background: #232d42; }
+.themeask .opt b { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 500; font-size: 15px; padding-left: 2px; }
+.themeask .opt b svg { width: 16px; height: 16px; }
+.themeask small { display: block; margin-top: 16px; font-size: 13px; color: var(--muted); }
+@media (max-width: 420px) { .themeask .opts { grid-template-columns: 1fr; } }
+
+/* scroll reveal: only applied to content that starts below the fold */
+.pre { transform: translateY(28px); opacity: .25; }
+.reveal { transition: transform .9s cubic-bezier(.2,.7,.2,1), opacity .9s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .pre { transform: none !important; opacity: 1 !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---- team guide additions ---- */
+.rail ol { grid-template-columns: repeat(10, minmax(112px, 1fr)); min-width: 1140px; }
+
+/* screen sketches: labelled blocks standing in for screenshots */
+.sk-scroll { overflow-x: auto; }
+.sk { position: relative; aspect-ratio: 16 / 10; min-width: 640px; background: var(--ground); }
+.sk .b { position: absolute; border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 9px 11px; font: 11.5px/1.45 var(--font-mono); color: var(--muted); overflow: hidden; transition: border-color .3s, box-shadow .3s; }
+.sk .b b { display: block; font: 500 12.5px/1.3 var(--font-sans); color: var(--ink); margin-bottom: 3px; }
+.sk .b.on { border-color: var(--cobalt); box-shadow: 0 0 0 3px var(--cobalt-soft); }
+.sk .b.acc { background: var(--cobalt-fill); border-color: var(--cobalt-fill); color: #fff; display: grid; place-items: center; font: 500 12.5px var(--font-sans); }
+.sk .b.lime { background: var(--chalk); border-color: var(--chalk); color: #0c1424; display: grid; place-items: center; font: 500 12.5px var(--font-sans); }
+.sk .b.map { background-color: color-mix(in srgb, var(--data) 10%, var(--bg)); background-image: radial-gradient(color-mix(in srgb, var(--data) 30%, transparent) 1px, transparent 1px); background-size: 14px 14px; }
+.sk .row { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line-soft); }
+.sk .row:last-child { border-bottom: 0; }
+.sk .row em { font-style: normal; color: var(--cobalt); }
+.sk .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.sk .chips i { font-style: normal; border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; color: var(--ink); background: var(--bg); }
+.sk .chips i.on { background: var(--cobalt-fill); color: #fff; border-color: var(--cobalt-fill); }
+.sk .hx { position: absolute; width: 34px; height: 38px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); opacity: .85; }
+.sk .bubble { position: absolute; width: 30px; height: 30px; border-radius: 50%; background: var(--cobalt-fill); color: #fff; font: 500 10.5px/30px var(--font-mono); text-align: center; }
+.sk .outline { position: absolute; border: 2px dashed var(--cobalt); border-radius: 14px; background: color-mix(in srgb, var(--cobalt) 8%, transparent); }
+.sk .big { font: 400 26px/1.1 var(--font-display); color: var(--ink); }
+.sk .ok { color: var(--ok); }
+.sk .chat { border-radius: 10px; padding: 7px 10px; margin-top: 6px; font-family: var(--font-sans); font-size: 12px; color: var(--ink); background: var(--ground); }
+.sk .chat.me { background: var(--cobalt-soft); color: var(--cobalt); margin-left: 18%; }
+.sk .b[data-k]:not(.map):not(.acc):not(.lime) { padding-left: 34px; }
+.script .names { margin: 12px 0 0; display: flex; flex-direction: column; gap: 0; }
+.script .names > div { padding: 12px 0; border-bottom: 1px solid color-mix(in srgb, var(--cobalt) 18%, transparent); }
+.script .names > div:first-child { padding-top: 4px; }
+.script .names > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.script .names dt { font: 400 20px/1.25 var(--font-display); color: var(--ink); }
+.script .names dt small { margin-left: 8px; font: 500 11px var(--font-mono); letter-spacing: .04em; color: var(--cobalt); background: var(--bg); padding: 2px 7px; border-radius: 999px; vertical-align: middle; }
+.script .names dd { margin: 4px 0 0; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.sk-note { margin-top: 10px; font: 12px var(--font-mono); color: var(--muted); }
+
+/* folder tree in the repo frames */
+.tree { background: var(--term); color: var(--term-ink); font: 13px/1.8 var(--font-mono); padding: 18px 20px; overflow-x: auto; white-space: pre; }
+.tree .d { color: var(--chalk); }
+.tree .c { color: var(--term-muted); }
+.who-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.who-row span { font: 500 12px var(--font-mono); padding: 4px 10px; border-radius: 999px; background: var(--ground); border: 1px solid var(--line); color: var(--ink); }
+.who-row span.k { background: var(--cobalt-soft); color: var(--cobalt); border-color: transparent; }
+
+/* before / after */
+.ba { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+@media (max-width: 760px) { .ba { grid-template-columns: 1fr; } }
+.ba > div { padding: 26px; }
+.ba > div:first-child { background: var(--ground); border-right: 1px solid var(--line); }
+@media (max-width: 760px) { .ba > div:first-child { border-right: 0; border-bottom: 1px solid var(--line); } }
+.ba h3 { font-size: 24px; margin-top: 8px; }
+.ba ul { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+.ba li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; }
+.ba li::before { content: "—"; color: var(--muted); }
+.ba > div:last-child li::before { content: "✓"; color: var(--ok); font-weight: 600; }
+.ba .stat { margin-top: 18px; font: 400 40px/1 var(--font-display); color: var(--ink); }
+.ba .stat small { display: block; font: 13px var(--font-sans); color: var(--muted); margin-top: 6px; }
+.ba > div:last-child .stat { color: var(--cobalt); }
+
+/* customer cards */
+.cust { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 16px; align-items: start; }
+.cust .av { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font: 500 15px var(--font-mono); color: #fff; background: var(--cobalt-fill); }
+.cust .av.d { background: var(--data); }
+.cust h3 { margin-top: 0; }
+.cust .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+.cust .tags i { font-style: normal; font: 11.5px var(--font-mono); padding: 2px 8px; border-radius: 6px; background: var(--ground); border: 1px solid var(--line-soft); color: var(--ink); }
+
+/* data domains */
+.domains { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+@media (max-width: 860px) { .domains { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .domains { grid-template-columns: 1fr; } }
+.domains > div { padding: 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg); }
+.domains > div:nth-child(3n) { border-right: 0; }
+.domains > div:nth-last-child(-n+3) { border-bottom: 0; }
+@media (max-width: 860px) { .domains > div { border-right: 1px solid var(--line) !important; border-bottom: 1px solid var(--line) !important; } }
+.domains .n { font: 500 12px var(--font-mono); color: var(--cobalt); }
+.domains b { display: block; margin-top: 8px; font: 400 21px/1.2 var(--font-display); color: var(--ink); }
+.domains span { display: block; margin-top: 6px; font-size: 14px; color: var(--muted); }
+.domains .gate { display: inline-block; margin-top: 10px; font: 500 11px var(--font-mono); padding: 2px 8px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); }
+
+/* roadmap */
+.pipeline.road { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.pipeline.road em { display: block; font: 500 11px var(--font-mono); font-style: normal; color: var(--muted); margin-top: 2px; letter-spacing: .04em; }
+.pipeline.road div.at em { color: var(--cobalt); }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Propelogo team field guide, top">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 21 7.5v9L12 21.5 3 16.5v-9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 7.5 16.5 10v4.5L12 17l-4.5-2.5V10Z" fill="var(--cobalt)"/></svg>
+      propelogo <small>team</small>
+    </a>
+    <nav aria-label="Chapters">
+      <a href="#product">Product</a><a href="#users">Users</a><a href="#screens">Screens</a><a href="#data">Data</a><a href="#roadmap">Roadmap</a><a href="#system">System</a><a href="#repos">Repos</a><a href="#work">How we work</a><a href="#team">Team</a><a href="#week">Week one</a>
+    </nav>
+    <div class="themebtn" role="group" aria-label="Theme">
+      <button type="button" data-set="light" aria-label="Light" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <button type="button" data-set="dark" aria-label="Dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="wrap hero">
+  <div>
+    <span class="eyebrow">Field guide · for new team members</span>
+    <h1 style="margin-top:14px">How Propelogo works, <em>from parcel to closed deal.</em></h1>
+    <p class="lede">Propelogo finds industrial property worth buying, finds the person behind the owner LLC, and helps brokers call and email them at scale. This is the overview for everyone joining, whatever your role: the product, who it's for, the data underneath, the repos, and how we work. The numbered pins are clickable.</p>
+    <div class="meta">
+      <a class="chip" href="https://propelogo.com/"><span class="dot"></span>propelogo.com</a>
+      <span class="chip">≈ 20 min read</span>
+      <span class="chip">10 chapters</span>
+    </div>
+  </div>
+  <div class="stack" aria-hidden="true">
+    <figure class="s1">
+      <div class="frame" style="border:0;box-shadow:none;border-radius:0">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo.com/map?state=NC</span></div>
+        <div class="sk" style="min-width:0;aspect-ratio:16/9">
+          <div class="b map" style="left:3%;top:6%;width:94%;height:88%;padding:0;border:0"></div>
+          <span class="hx" style="left:22%;top:26%;background:#eeb08f"></span>
+          <span class="hx" style="left:30%;top:36%;background:#c95f34"></span>
+          <span class="hx" style="left:38%;top:26%;background:#e08a5f"></span>
+          <span class="hx" style="left:46%;top:46%;background:#a8431f"></span>
+          <span class="hx" style="left:56%;top:30%;background:#f6d5c4"></span>
+          <span class="bubble" style="left:66%;top:52%">310</span>
+          <span class="bubble" style="left:18%;top:60%">84</span>
+        </div>
+      </div>
+    </figure>
+    <figure class="s2">
+      <div class="mini-pr">
+        <span style="margin:0">701 Atando Av · Charlotte</span>
+        <b style="font:400 30px/1.1 var(--font-display);margin-top:6px">$22.2M</b>
+        <span>engine valuation · 6.8 ac · 3.4 ac paved yard</span>
+        <span class="merged">● 5 of 5 gates</span>
+      </div>
+    </figure>
+    <figure class="s3">
+      <div class="mini-pr">
+        <b>John J Davis</b>
+        <span>(919) 555-0119 · local</span>
+        <span class="merged">● connected · 0:42</span>
+      </div>
+    </figure>
+    <span class="tag" style="left:4%;top:-3%">Find</span>
+    <span class="tag" style="right:6%;top:30%">Qualify</span>
+    <span class="tag" style="left:4%;bottom:-3%">Call</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <nav class="rail" aria-label="Your path">
+    <ol>
+      <li><a href="#product"><div class="n">1</div><div class="t">The product</div><div class="d">Problem, bet, North Star</div></a></li>
+      <li><a href="#users"><div class="n">2</div><div class="t">Who it's for</div><div class="d">Brokers, callers, roles</div></a></li>
+      <li><a href="#screens"><div class="n">3</div><div class="t">The screens</div><div class="d">Map → CRM → calls</div></a></li>
+      <li><a href="#data"><div class="n">4</div><div class="t">The data</div><div class="d">Six domains, three tiers</div></a></li>
+      <li><a href="#roadmap"><div class="n">5</div><div class="t">Where we are</div><div class="d">Releases and October</div></a></li>
+      <li><a href="#system"><div class="n">6</div><div class="t">How it's built</div><div class="d">Services and databases</div></a></li>
+      <li><a href="#repos"><div class="n">7</div><div class="t">The repos</div><div class="d">What lives where</div></a></li>
+      <li><a href="#work"><div class="n">8</div><div class="t">How we work</div><div class="d">Spec, issue, ship, rules</div></a></li>
+      <li><a href="#team"><div class="n">9</div><div class="t">The team</div><div class="d">Who owns what</div></a></li>
+      <li><a href="#week"><div class="n">10</div><div class="t">Week one</div><div class="d">Checklist + glossary</div></a></li>
+    </ol>
+  </nav>
+</div>
+
+<!-- 01 PRODUCT -->
+<section class="chapter" id="product">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">01</div>
+      <div>
+        <span class="eyebrow">The product</span>
+        <h2>The money is in the yard, not the building.</h2>
+        <p>Our launch partner buys industrial parcels whose <b>extra paved yard</b> can be leased for outdoor storage and vehicle parking. Legacy industrial owners rarely price their own parking lot as revenue, so the deals sit in public data that nobody reads at scale. Propelogo reads it for them, then gets them on the phone with the owner.</p>
+      </div>
+    </div>
+    <div class="ba">
+      <div>
+        <span class="eyebrow">Today, by hand</span>
+        <h3>One analyst, one city, one spreadsheet</h3>
+        <ul>
+          <li>Draw yard polygons in Google Earth, one parcel at a time</li>
+          <li>Two zoning lookups per parcel to see if outdoor storage is allowed</li>
+          <li>Re-key everything into a 196-row Excel funnel</li>
+          <li>Hunt for the human behind each LLC, then dial one number at a time</li>
+        </ul>
+        <div class="stat">~150–200<small>addresses in one city per month</small></div>
+      </div>
+      <div>
+        <span class="eyebrow">With Propelogo</span>
+        <h3>One investor covers a state</h3>
+        <ul>
+          <li>Zoning, use tables, flood, environmental and paved yard ingested nationwide</li>
+          <li>Every parcel scored against five gates and valued automatically</li>
+          <li>Owner lookup finds the person and phone behind the LLC</li>
+          <li>Parallel dialer and bulk personalized email work the list</li>
+        </ul>
+        <div class="stat">A state<small>instead of a city, at the same headcount</small></div>
+      </div>
+    </div>
+    <div class="script">
+      <div>
+        <span class="eyebrow">North Star</span>
+        <blockquote>"<mark>The agent sources; the human decides.</mark> Blake doesn't open a laptop to find deals. He states his criteria, the agent elevates sites overnight, and he takes the calls on his phone."</blockquote>
+      </div>
+      <div>
+        <span class="eyebrow">Three names you'll hear</span>
+        <dl class="names">
+          <div><dt>Propelogo <small>a.k.a. Legion</small></dt><dd>The product. Everything in this guide.</dd></div>
+          <div><dt>Titan Capital Advisory</dt><dd>The public brokerage website owners see. No product features, no login.</dd></div>
+          <div><dt>Oak Network</dt><dd>The company behind the team. Its other products (LeasePilot, Vaki, OAK core) are separate; never mix them up with Propelogo.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 USERS -->
+<section class="chapter" id="users">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">02</div>
+      <div>
+        <span class="eyebrow">Who it's for</span>
+        <h2>Brokers find the deals. Callers work the phones.</h2>
+        <p>We build for a launch partner first and make it sellable to the next broker without new data work. Their feedback arrives as emails, test notes and syncs, all filed under <code>customers/</code> in the product docs. Product questions for them go through Jan or Fahmida, never straight from the team.</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card cust">
+        <span class="av">BL</span>
+        <div>
+          <span class="eyebrow">Launch partner</span>
+          <h3>Blake · industrial broker</h3>
+          <p>Our design partner since June. His manual workflow (modules M1–M20) is the source of truth for what we automate. He reviews the feature lists and runs syncs with the team several times a week.</p>
+          <div class="tags"><i>outdoor storage</i><i>vehicle parking</i><i>NC first</i><i>reviews FE + CP lists</i></div>
+        </div>
+      </div>
+      <div class="card cust">
+        <span class="av d">DA</span>
+        <div>
+          <span class="eyebrow">Second broker</span>
+          <h3>Davis · same stack</h3>
+          <p>Proves the product works beyond one person. His two problems shape the October work: finding the person to call, and keeping up with 20–30 follow-ups a day.</p>
+          <div class="tags"><i>throughput</i><i>CRM nurture</i><i>follow-ups</i></div>
+        </div>
+      </div>
+    </div>
+    <h3 style="font-size:clamp(24px,3vw,30px);margin:48px 0 22px">Four roles inside the app. An admin picks one when approving a sign-up.</h3>
+    <div class="role-grid" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+      <article class="role" style="--rc: var(--ink)">
+        <header><span class="av">AD</span><div><b>Admin</b><span>Runs the team</span></div></header>
+        <div class="minibar"><i class="on">Map</i><i>Leads</i><i>CRM</i><i>Calls</i><i>Admin</i></div>
+        <ul><li>Everything a realtor can do</li><li>Approves sign-ups, sets role and territory</li><li>Settings, costs, feature switches</li></ul>
+        <footer>Opens on <span class="mono">Map</span></footer>
+      </article>
+      <article class="role" style="--rc: var(--cobalt)">
+        <header><span class="av">RE</span><div><b>Realtor</b><span>Finds deals, works owners</span></div></header>
+        <div class="minibar"><i class="on">Map</i><i>Leads</i><i>Copilot</i><i>CRM</i><i>Calls</i></div>
+        <ul><li>Map, corridors, parcels, valuations</li><li>Owner lookups, email, mail, calls</li><li>Assigns leads to callers</li><li class="n">Can't manage users</li></ul>
+        <footer>Opens on <span class="mono">Map</span></footer>
+      </article>
+      <article class="role" style="--rc: var(--data)">
+        <header><span class="av">CA</span><div><b>Caller</b><span>Dials what they're given</span></div></header>
+        <div class="minibar"><i class="on">CRM</i><i>Calls</i></div>
+        <ul><li>Assigned leads + the shared queue</li><li>Dials with the brief and script</li><li>Logs results and callbacks</li><li class="n">No map or agent</li></ul>
+        <footer>Opens on <span class="mono">CRM</span></footer>
+      </article>
+      <article class="role" style="--rc: var(--warn)">
+        <header><span class="av">MO</span><div><b>Caller monitor</b><span>Coaches quality</span></div></header>
+        <div class="minibar"><i class="on">Calls</i></div>
+        <ul><li>Every call, outcome, recording</li><li>Reads transcripts</li><li class="n">Can't edit or place calls</li></ul>
+        <footer>Opens on <span class="mono">Calls › Caller monitor</span></footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 03 SCREENS -->
+<section class="chapter" id="screens">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">03</div>
+      <div>
+        <span class="eyebrow">The screens</span>
+        <h2>Every screen serves one loop.</h2>
+        <p>Find a parcel, check it qualifies, find the owner, reach out, work the reply. Below is a sketch of each main screen. For real screenshots and click-by-click detail, read the <a href="https://claude.ai/artifact/VfV3AvdzqjssiYyJEQaBUJ?sk=du1e9wu6XX_ovVl6UwVeWg">realtor field guide</a>, then click through it yourself on <span class="mono">stage.propelogo.com</span>.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:32px">
+      <span class="eyebrow">The broker's loop</span>
+      <div class="pipeline" style="margin-top:14px">
+        <button class="token" type="button" aria-hidden="true" tabindex="-1"></button>
+        <div><b>Find</b><span>Map and corridors over national parcel data.</span></div>
+        <div><b>Qualify</b><span>Five gates and an engine valuation per parcel.</span></div>
+        <div><b>Find the owner</b><span>LLC → person → phone and email (skip-trace).</span></div>
+        <div><b>Reach out</b><span>Parallel dialer, bulk email, Copilot drafts.</span></div>
+        <div><b>Work the CRM</b><span>Contacted → Interested → Negotiating → Closed.</span></div>
+      </div>
+    </div>
+
+    <div class="tabrow">
+      <span class="tabhint">Pick a screen</span>
+      <div class="tabs" role="tablist" aria-label="Product screens" data-tabs="scr">
+        <button role="tab" aria-selected="true" data-tab="map"><span class="tn">1</span>Map</button>
+        <button role="tab" aria-selected="false" data-tab="corr"><span class="tn">2</span>Corridors</button>
+        <button role="tab" aria-selected="false" data-tab="parcel"><span class="tn">3</span>Parcel</button>
+        <button role="tab" aria-selected="false" data-tab="crm"><span class="tn">4</span>CRM</button>
+        <button role="tab" aria-selected="false" data-tab="calls"><span class="tn">5</span>Calls</button>
+        <button role="tab" aria-selected="false" data-tab="cop"><span class="tn">6</span>Copilot</button>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="scr:map">
+      <div class="shot" data-hotspots>
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo.com/map?state=NC</span></div>
+          <div class="sk-scroll"><div class="sk">
+            <div class="b" data-k="1" style="left:2%;top:3%;width:96%;height:10%"><div class="chips"><i>Search address, owner, parcel ID</i><i class="on">NC</i><i>Zoning</i><i>Outdoor storage</i><i>All filters</i></div></div>
+            <div class="b map" data-k="2" style="left:2%;top:16%;width:68%;height:81%"></div>
+            <span class="hx" style="left:16%;top:34%;background:#eeb08f"></span><span class="hx" style="left:23%;top:44%;background:#c95f34"></span><span class="hx" style="left:30%;top:34%;background:#e08a5f"></span><span class="hx" style="left:37%;top:54%;background:#a8431f"></span><span class="hx" style="left:46%;top:38%;background:#f6d5c4"></span>
+            <span class="bubble" style="left:54%;top:62%">310</span><span class="bubble" style="left:12%;top:70%">84</span>
+            <div class="b" data-k="3" style="left:72%;top:16%;width:26%;height:52%"><b>Corridors in view</b><div class="row">North River<em>1 of 28 called</em></div><div class="row">Airport Blvd<em>new</em></div><div class="row">Rail Park<em>12 of 40</em></div></div>
+            <div class="b" data-k="4" style="left:72%;top:71%;width:26%;height:26%"><b>Layers</b>imagery · flood · wetlands · color by value</div>
+            <button class="pin" style="left:3%;top:4%" data-k="1">1</button>
+            <button class="pin" style="left:3%;top:17%" data-k="2">2</button>
+            <button class="pin" style="left:73%;top:17%" data-k="3">3</button>
+            <button class="pin" style="left:73%;top:72%" data-k="4">4</button>
+          </div></div>
+        </div>
+        <ol class="legend">
+          <li data-k="1"><span class="k">1</span><div><b>Search and filters</b><span>Address, owner, city or parcel ID. Filters for state, zoning, land use and outdoor storage. The list and the map always match.</span></div></li>
+          <li data-k="2"><span class="k">2</span><div><b>Where properties fit</b><span>Warm hexagons show where parcels match. Zoom State → Metro → Parcels; at parcel zoom every lot is drawn.</span></div></li>
+          <li data-k="3"><span class="k">3</span><div><b>Corridors in view</b><span>Ready-made target lists in the area on screen, with progress like "1 of 28 called".</span></div></li>
+          <li data-k="4"><span class="k">4</span><div><b>Layers</b><span>Imagery, flood, wetlands and more. Color parcels by the measure you care about.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="scr:corr" hidden>
+      <div class="shot" data-hotspots>
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo.com/map · Saved views · North River</span></div>
+          <div class="sk-scroll"><div class="sk">
+            <div class="b" data-k="1" style="left:2%;top:4%;width:30%;height:16%"><div class="chips"><i class="on">Explore</i><i>Standalone</i><i>My views</i></div><div style="margin-top:8px">NC · Greenville</div></div>
+            <div class="b" data-k="2" style="left:2%;top:23%;width:30%;height:44%"><div class="row"><span><b style="margin:0">North River</b>310 parcels · industrial</span><em>Open</em></div><div class="row">Fire Tower Rd<em>Open</em></div><div class="row">Memorial Dr<em>Open</em></div></div>
+            <div class="b acc" data-k="3" style="left:2%;top:71%;width:30%;height:10%">Add all to CRM</div>
+            <div class="b lime" data-k="4" style="left:2%;top:84%;width:30%;height:10%">Find 310 owners</div>
+            <div class="b map" style="left:35%;top:4%;width:63%;height:92%"></div>
+            <div class="outline" style="left:44%;top:18%;width:42%;height:58%"></div>
+            <div class="b acc" data-k="5" style="left:72%;top:84%;width:24%;height:9%">Queue calls</div>
+            <button class="pin" style="left:3%;top:5%" data-k="1">1</button>
+            <button class="pin" style="left:3%;top:24%" data-k="2">2</button>
+            <button class="pin" style="left:3%;top:72%" data-k="3">3</button>
+            <button class="pin" style="left:3%;top:85%" data-k="4">4</button>
+            <button class="pin" style="left:73%;top:85%" data-k="5">5</button>
+          </div></div>
+        </div>
+        <ol class="legend">
+          <li data-k="1"><span class="k">1</span><div><b>Three kinds of saved view</b><span><b style="display:inline">Explore</b> corridors for everyone, <b style="display:inline">Standalone</b> good sites outside any corridor, <b style="display:inline">My views</b> lassos you saved.</span></div></li>
+          <li data-k="2"><span class="k">2</span><div><b>A corridor</b><span>A cluster of industrial parcels along a road or in a park, e.g. North River, Greenville, 310 parcels. It's a call list, already built.</span></div></li>
+          <li data-k="3"><span class="k">3</span><div><b>Add all to CRM</b><span>Every parcel becomes a lead. Ones already in the CRM are skipped.</span></div></li>
+          <li data-k="4"><span class="k">4</span><div><b>Find the owners</b><span>Looks up the person behind each LLC and their phones. This is where skip-trace spend happens.</span></div></li>
+          <li data-k="5"><span class="k">5</span><div><b>Queue calls</b><span>Adds and queues every owner with a phone in one step.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="scr:parcel" hidden>
+      <div class="shot" data-hotspots>
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo.com/map · 701 Atando Av</span></div>
+          <div class="sk-scroll"><div class="sk">
+            <div class="b" data-k="1" style="left:2%;top:4%;width:36%;height:26%"><span>Engine valuation</span><div class="big">$22.2M</div><span>building + yard rent ÷ cap rate</span></div>
+            <div class="b" data-k="2" style="left:2%;top:33%;width:36%;height:38%"><b>Gates · <span class="ok">5 of 5</span></b><div class="row">Zoning allows outdoor storage<em class="ok">✓</em></div><div class="row">No residential neighbor<em class="ok">✓</em></div><div class="row">No environmental flags<em class="ok">✓</em></div><div class="row">Low flood risk · paved yard<em class="ok">✓</em></div></div>
+            <div class="b" data-k="3" style="left:2%;top:74%;width:36%;height:10%"><div class="chips"><i class="on">Overview</i><i>Value</i><i>Owner</i><i>Site</i></div></div>
+            <div class="b acc" data-k="4" style="left:2%;top:87%;width:36%;height:9%">Open lead</div>
+            <div class="b map" style="left:41%;top:4%;width:57%;height:92%"></div>
+            <div class="outline" data-k="5" style="left:52%;top:20%;width:34%;height:56%;border-style:solid"></div>
+            <button class="pin" style="left:3%;top:5%" data-k="1">1</button>
+            <button class="pin" style="left:3%;top:34%" data-k="2">2</button>
+            <button class="pin" style="left:3%;top:75%" data-k="3">3</button>
+            <button class="pin" style="left:3%;top:88%" data-k="4">4</button>
+            <button class="pin" style="left:53%;top:21%" data-k="5">5</button>
+          </div></div>
+        </div>
+        <ol class="legend">
+          <li data-k="1"><span class="k">1</span><div><b>Engine valuation</b><span>Our estimate from building and paved-yard rent capitalized at a market cap rate, shown next to the county's assessed value.</span></div></li>
+          <li data-k="2"><span class="k">2</span><div><b>Five gates</b><span>Zoning allows outdoor storage, no residential neighbor, no environmental flags, low flood risk, enough paved yard. Pass all five and it's a real lead.</span></div></li>
+          <li data-k="3"><span class="k">3</span><div><b>Four tabs</b><span>Overview, Value (edit rents and cap rate), Owner (find the person behind the LLC), Site (building, yard and ground measured from imagery).</span></div></li>
+          <li data-k="4"><span class="k">4</span><div><b>Open lead</b><span>The full page: aerial photo, comps, zoning and permitted uses, environmental, building attributes, tags.</span></div></li>
+          <li data-k="5"><span class="k">5</span><div><b>The lot</b><span>Building and paved yard measured from aerial imagery (computer vision) are shaded on the parcel.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="scr:crm" hidden>
+      <div class="shot" data-hotspots>
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo.com/crm</span></div>
+          <div class="sk-scroll"><div class="sk">
+            <div class="b" data-k="1" style="left:2%;top:4%;width:40%;height:10%"><div class="chips"><i class="on">Queue</i><i>Board</i><i>List</i></div></div>
+            <div class="b" data-k="2" style="left:2%;top:17%;width:96%;height:11%"><div class="chips"><i>New 310</i><i>Contacted 42</i><i>No response 18</i><i>Interested 6</i><i>Negotiating 2</i><i>Closed 1</i></div></div>
+            <div class="b lime" data-k="3" style="left:2%;top:31%;width:96%;height:9%">Find owners &amp; phones for 268 leads</div>
+            <div class="b" data-k="4" style="left:2%;top:43%;width:96%;height:53%"><b>Today's calls · ranked by the agent</b><div class="row">Callback due · Cutter Family Properties<em>Call</em></div><div class="row">John J Davis · 2120 E Fire Tower Rd<em>Call</em></div><div class="row">Saga Properties · needs phone<em>Find</em></div><div class="row">Chen Yvonne · 9 ac yard<em>Call</em></div></div>
+            <button class="pin" style="left:3%;top:5%" data-k="1">1</button>
+            <button class="pin" style="left:3%;top:18%" data-k="2">2</button>
+            <button class="pin" style="left:3%;top:32%" data-k="3">3</button>
+            <button class="pin" style="left:3%;top:44%" data-k="4">4</button>
+          </div></div>
+        </div>
+        <ol class="legend">
+          <li data-k="1"><span class="k">1</span><div><b>Queue · Board · List</b><span>Today's ranked list, a pipeline board, or a plain table.</span></div></li>
+          <li data-k="2"><span class="k">2</span><div><b>The pipeline</b><span>New → Contacted → No response → Interested → Negotiating → Closed. Every call result moves a lead along.</span></div></li>
+          <li data-k="3"><span class="k">3</span><div><b>Find owners &amp; phones</b><span>Runs in the background; numbers found go straight into the call queue.</span></div></li>
+          <li data-k="4"><span class="k">4</span><div><b>Today's calls</b><span>Callbacks due first, then fresh owners nobody has called. Each lead page has Call, Email and Mail (postcard).</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="scr:calls" hidden>
+      <div class="shot" data-hotspots>
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo.com/callers/queue</span></div>
+          <div class="sk-scroll"><div class="sk">
+            <div class="b" data-k="1" style="left:2%;top:4%;width:46%;height:20%"><b>Calling from</b>Auto · local number per owner<b style="margin-top:6px">Dialing mode</b>Parallel · 3 lines · instant connect</div>
+            <div class="b acc" data-k="2" style="left:51%;top:4%;width:20%;height:20%">Start calling</div>
+            <div class="b" data-k="3" style="left:74%;top:4%;width:24%;height:20%"><b>This session</b>dialed 48 · talked 6<br>voicemail 11</div>
+            <div class="b" data-k="4" style="left:2%;top:28%;width:56%;height:68%"><b>Three lines ring</b><div class="row">Cutter Family Properties<em>ringing</em></div><div class="row">John J Davis<em class="ok">connected 0:42</em></div><div class="row">Saga Properties<em>machine · dropped</em></div></div>
+            <div class="b" data-k="5" style="left:61%;top:28%;width:37%;height:68%"><b>Brief + script</b><div class="chat">"Hey, is this John? I'm calling from Titan Capital Advisory about your property at 2120 E Fire Tower Rd…"</div><div class="chips" style="margin-top:8px"><i>Interested</i><i>Callback</i><i>Not interested</i><i>Do not call</i></div></div>
+            <button class="pin" style="left:3%;top:5%" data-k="1">1</button>
+            <button class="pin" style="left:52%;top:5%" data-k="2">2</button>
+            <button class="pin" style="left:75%;top:5%" data-k="3">3</button>
+            <button class="pin" style="left:3%;top:29%" data-k="4">4</button>
+            <button class="pin" style="left:62%;top:29%" data-k="5">5</button>
+          </div></div>
+        </div>
+        <ol class="legend">
+          <li data-k="1"><span class="k">1</span><div><b>Local caller ID, parallel dialing</b><span>Each owner sees a local number. Up to three lines ring at once.</span></div></li>
+          <li data-k="2"><span class="k">2</span><div><b>Start calling</b><span>A human runs the session. The dialer handles ringing, answering machines and the next number.</span></div></li>
+          <li data-k="3"><span class="k">3</span><div><b>Live stats</b><span>Dialed, talked, voicemails. Call throughput is this quarter's key metric.</span></div></li>
+          <li data-k="4"><span class="k">4</span><div><b>First person to answer wins</b><span>You're connected instantly; the other lines drop. Machines are hung up automatically.</span></div></li>
+          <li data-k="5"><span class="k">5</span><div><b>Script and outcome</b><span>An opening written from the lead's facts, then one tap to log the result. Callbacks land on the calendar; Do not call is permanent.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="scr:cop" hidden>
+      <div class="shot" data-hotspots>
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo.com/copilot</span></div>
+          <div class="sk-scroll"><div class="sk">
+            <div class="b" data-k="1" style="left:2%;top:4%;width:56%;height:22%"><b>Ask in plain English</b><div class="chat me">Add the top 5 warehouse-zoned parcels in Winston-Salem to the CRM</div></div>
+            <div class="b" data-k="2" style="left:2%;top:29%;width:56%;height:30%"><b>Tool trace</b>search_parcels(zoning=warehouse, city=Winston-Salem)<br>rank_by(engine_value)<br>preview_bulk_add(5)</div>
+            <div class="b" data-k="3" style="left:2%;top:62%;width:56%;height:34%"><b>Before it changes anything</b><div class="chat">I'll add 5 parcels (2 already in your CRM are skipped). Confirm?</div><div class="chips" style="margin-top:8px"><i class="on">Confirm</i><i>Edit</i></div></div>
+            <div class="b" data-k="4" style="left:61%;top:4%;width:37%;height:92%"><b>Results</b><div class="row">3630 Reed St<em>$4.1M</em></div><div class="row">Thomasville Rd<em>$3.6M</em></div><div class="row">300 Cassell St<em>$2.9M</em></div><div class="row">Starlight Dr<em>$2.4M</em></div><div class="row">Associate Dr<em>$2.2M</em></div><div style="margin-top:8px">table · map · JSON</div></div>
+            <button class="pin" style="left:3%;top:5%" data-k="1">1</button>
+            <button class="pin" style="left:3%;top:30%" data-k="2">2</button>
+            <button class="pin" style="left:3%;top:63%" data-k="3">3</button>
+            <button class="pin" style="left:62%;top:5%" data-k="4">4</button>
+          </div></div>
+        </div>
+        <ol class="legend">
+          <li data-k="1"><span class="k">1</span><div><b>Copilot (the agent)</b><span>Ask for parcels, valuations or CRM changes in plain English. Also docked in the map as "Ask agent".</span></div></li>
+          <li data-k="2"><span class="k">2</span><div><b>Tools, not guesses</b><span>It answers by calling tools over the parcel database. You can watch the trace.</span></div></li>
+          <li data-k="3"><span class="k">3</span><div><b>Shows bulk changes first</b><span>Anything that touches many leads is previewed and confirmed before it runs.</span></div></li>
+          <li data-k="4"><span class="k">4</span><div><b>Ranked results</b><span>As a table, on the map, or raw. Quality is checked daily against a fixed set of 10 eval prompts.</span></div></li>
+        </ol>
+      </div>
+    </div>
+    <p class="sk-note">Sketches, not screenshots. Numbers and names are examples.</p>
+  </div>
+</section>
+
+<!-- 04 DATA -->
+<section class="chapter" id="data">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">04</div>
+      <div>
+        <span class="eyebrow">The data underneath</span>
+        <h2>Public data, collected county by county.</h2>
+        <p>Every jurisdiction publishes its data differently, so most of the hard work is collection and cleanup. Each parcel gets six data domains. Together they power the five gates and the valuation you saw on the parcel card. Full detail: <a href="https://github.com/Propelogo/leadgen-product-docs/blob/main/LeadGen_PRD_Data_Categories.md">data categories</a>.</p>
+      </div>
+    </div>
+    <div class="domains">
+      <div><span class="n">01</span><b>Parcels</b><span>The lot polygon and IDs. The core record everything attaches to.</span></div>
+      <div><span class="n">02</span><b>Zoning + use tables</b><span>District and the ordinance's permitted uses: is outdoor storage allowed?</span><em class="gate">gate: zoning</em></div>
+      <div><span class="n">03</span><b>Tax assessor</b><span>Owner of record, building square feet, year built, assessed value.</span></div>
+      <div><span class="n">04</span><b>Flood</b><span>FEMA flood zones (SFHA) per parcel.</span><em class="gate">gate: flood</em></div>
+      <div><span class="n">05</span><b>Environmental</b><span>Contamination sites on or near the parcel (USTs, brownfields, RCRA).</span><em class="gate">gate: environmental</em></div>
+      <div><span class="n">06</span><b>Impervious / vision</b><span>Building and paved yard measured from aerial imagery (NAIP) with computer vision.</span><em class="gate">gate: paved yard</em></div>
+    </div>
+    <div class="ladder" style="margin-top:28px">
+      <div>
+        <span class="lvl">Foundation</span>
+        <b>Collected first in every state</b>
+        <p>Population ≥ 25k or ≥ 5k industrial jobs. ~2,927 jurisdictions, ~79% of the US population.</p>
+      </div>
+      <div>
+        <span class="lvl">Expansion</span>
+        <b>Paused</b>
+        <p>Population 5k–25k or ≥ 1k industrial jobs. Stopped in October so we can finish quality on Foundation.</p>
+      </div>
+      <div>
+        <span class="lvl">Completion</span>
+        <b>Deferred</b>
+        <p>Small, low-industrial places. Waits until national coverage is 50–60%.</p>
+      </div>
+    </div>
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+      <div><b>Right now: Foundation + Florida QC.</b> Computer vision runs on Florida industrial only. The canonical worklist is <a href="https://github.com/Propelogo/leadgen-pipeline/blob/main/docs/data/0052-nationwide-data-collection-tiers.md">0052 nationwide tiers</a>; QC means checking about 20 parcels per state against reality.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 ROADMAP -->
+<section class="chapter" id="roadmap">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">05</div>
+      <div>
+        <span class="eyebrow">Where we are</span>
+        <h2>The funnel is fat. Calls and email are the pinch.</h2>
+        <p>Finding parcels is no longer the bottleneck; reaching owners is. October is about turning a big, clean list into conversations, and proving it with numbers week over week ahead of the late-October roadshow.</p>
+      </div>
+    </div>
+    <div class="card">
+      <span class="eyebrow">Releases</span>
+      <div class="pipeline road" style="margin-top:14px">
+        <div class="done"><b>MVP</b><em>June 2026</em><span>North Carolina end to end for one investor. Blake is the only user.</span></div>
+        <div class="done"><b>v1</b><em>July 2026</em><span>NC complete and sellable. Multi-user: realtor and caller roles.</span></div>
+        <div class="done"><b>v2</b><em>Aug → rolling</em><span>Nationwide data collection, outreach agents, first autonomy.</span></div>
+        <div class="at"><b>October</b><em>now</em><span>Foundation + Florida QC, then calls, then email. Lanes locked 6 Oct.</span></div>
+        <div><b>Roadshow</b><em>late October</em><span>Baseline → target % on data, QC, calls and email.</span></div>
+      </div>
+    </div>
+    <div class="grid3" style="margin-top:20px">
+      <div class="card"><span class="eyebrow">Main goal</span><h3>Instrument the KPIs</h3><p>Numbers or it didn't happen. Tracked in the <a href="https://github.com/Propelogo/leadgen-product-docs/blob/main/OKRs-2026-09-15-29.md">OKR + KPI sheet</a>.</p></div>
+      <div class="card"><span class="eyebrow">Calls</span><h3>More live conversations</h3><p>Parallel dial, local caller ID, inbound callbacks on desk and iPhone. A human always talks.</p></div>
+      <div class="card"><span class="eyebrow">Email</span><h3>Bulk, but personal</h3><p>One prompt, many emails, each using a real fact about the property. Replies land in the CRM.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 SYSTEM -->
+<section class="chapter" id="system">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">06</div>
+      <div>
+        <span class="eyebrow">How it's built</span>
+        <h2>One app, one backend, two databases, one pipeline.</h2>
+        <p>You don't need to code to follow this. The app talks only to the backend. The backend owns the CRM data and reads the parcel data. The pipeline is the only thing that writes parcel data. Engineering detail: <a href="https://docs.google.com/document/d/1yf4RS6CLUvWp14DLnAJeu9C6FKwuV-gpzHXHExGPPw0/edit">Architecture &amp; System Map</a>.</p>
+      </div>
+    </div>
+    <div class="shot" data-hotspots>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">propelogo · production topology</span></div>
+        <div class="arch-scroll">
+          <div class="arch">
+            <svg class="wires" viewBox="0 0 100 71.875" preserveAspectRatio="none" aria-hidden="true">
+              <path class="flow" d="M30 10.8 L37 10.8"/>
+              <path class="flow" d="M63 10.8 L70 10.8"/>
+              <path d="M50 19 L50 27.3"/>
+              <path class="flow" d="M63 34.5 L70 34.5"/>
+              <path d="M37 34.5 L30 34.5"/>
+              <path class="flow" d="M86 52.5 L86 44.5"/>
+            </svg>
+            <div class="node" data-k="1" style="left:3%;top:5%;width:27%"><span class="eyebrow">leadgen-frontend</span><b>The web app</b><span>Next.js · Vercel<br>propelogo.com</span></div>
+            <div class="node" data-k="2" style="left:37%;top:5%;width:26%"><span class="eyebrow">leadgen-backend</span><b>The API</b><span>Node · TypeScript<br>api.propelogo.com</span></div>
+            <div class="node db" data-k="4" style="left:70%;top:5%;width:27%"><span class="eyebrow">app database</span><b>leadgen-demo</b><span>Users, leads, CRM, calls</span></div>
+            <div class="node" data-k="3" style="left:37%;top:38%;width:26%"><span class="eyebrow">inside the backend</span><b>Copilot agent</b><span>LangGraph + Claude</span></div>
+            <div class="node db ro" data-k="5" style="left:70%;top:38%;width:27%"><span class="eyebrow">parcel database</span><b>leadgen-gis</b><span>Parcels · zoning · vision<br>PostGIS</span></div>
+            <div class="node" data-k="7" style="left:3%;top:38%;width:27%"><span class="eyebrow">vendors</span><b>Services we pay for</b><div class="tags"><i>Supabase</i><i>Twilio</i><i>ElevenLabs</i><i>Resend</i><i>Gmail</i><i>skip-trace</i></div></div>
+            <div class="lane" data-k="6" style="left:3%;top:73%;width:94%">
+              <div class="node"><span class="eyebrow">leadgen-pipeline</span><b>County sources</b><span>assessor · zoning · flood</span></div>
+              <div class="arrow">→</div>
+              <div class="node"><span class="eyebrow">land</span><b>S3</b><span>raw files</span></div>
+              <div class="arrow">→</div>
+              <div class="node"><span class="eyebrow">model</span><b>Snowflake</b><span>clean + join</span></div>
+              <div class="arrow">→</div>
+              <div class="node"><span class="eyebrow">serve</span><b>PostGIS</b><span>into leadgen-gis</span></div>
+            </div>
+            <button class="pin" style="left:4%;top:6%" data-k="1">1</button>
+            <button class="pin" style="left:38%;top:6%" data-k="2">2</button>
+            <button class="pin" style="left:38%;top:39%" data-k="3">3</button>
+            <button class="pin" style="left:71%;top:6%" data-k="4">4</button>
+            <button class="pin" style="left:71%;top:39%" data-k="5">5</button>
+            <button class="pin" style="left:4%;top:74%" data-k="6">6</button>
+            <button class="pin" style="left:4%;top:39%" data-k="7">7</button>
+          </div>
+        </div>
+      </div>
+      <ol class="legend">
+        <li data-k="1"><span class="k">1</span><div><b>The web app</b><span>Every screen in chapter 3, including the in-browser dialer. Sign-in is Supabase.</span></div></li>
+        <li data-k="2"><span class="k">2</span><div><b>The API, the only backend</b><span>Leads, CRM, calling, scoring, valuation, owner lookups. Everything the app does goes through it.</span></div></li>
+        <li data-k="3"><span class="k">3</span><div><b>Copilot</b><span>Claude, orchestrated with LangGraph, reading the parcel database directly.</span></div></li>
+        <li data-k="4"><span class="k">4</span><div><b>App database</b><span>Users, leads, CRM status, call logs. Changed by the backend.</span></div></li>
+        <li data-k="5"><span class="k">5</span><div><b>Parcel database</b><span>The source of truth for parcels. Read-only to the app; only the pipeline writes it.</span></div></li>
+        <li data-k="6"><span class="k">6</span><div><b>The pipeline</b><span>Collects county data, lands it in S3, cleans it in Snowflake, serves it to the parcel database.</span></div></li>
+        <li data-k="7"><span class="k">7</span><div><b>Vendors</b><span>Sign-in, phone, voice, email and skip-trace. Each costs money per use, so cost is a product decision.</span></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 07 REPOS -->
+<section class="chapter" id="repos">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">07</div>
+      <div>
+        <span class="eyebrow">The repos</span>
+        <h2>Five repos. Know what lives where.</h2>
+        <p>Even if you never write code, you'll link to these. Issues live mostly in the frontend repo and all show up on the <a href="https://github.com/orgs/Propelogo/projects/2/views/1">LeadGen board</a>. Every code repo has a <code>CLAUDE.md</code> with its conventions.</p>
+      </div>
+    </div>
+    <div class="tabrow">
+      <span class="tabhint">Pick a repo</span>
+      <div class="tabs" role="tablist" aria-label="Repositories" data-tabs="repo">
+        <button role="tab" aria-selected="true" data-tab="dc"><span class="tn">DC</span>product-docs</button>
+        <button role="tab" aria-selected="false" data-tab="fe"><span class="tn">FE</span>frontend</button>
+        <button role="tab" aria-selected="false" data-tab="be"><span class="tn">BE</span>backend</button>
+        <button role="tab" aria-selected="false" data-tab="pl"><span class="tn">PL</span>pipeline</button>
+        <button role="tab" aria-selected="false" data-tab="ag"><span class="tn">AG</span>agent</button>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="repo:dc">
+      <div class="who-row"><span class="k">Everyone reads</span><span>Jan maintains</span><span>No code</span></div>
+      <div class="shot">
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">Propelogo/leadgen-product-docs</span><a class="open" href="https://github.com/Propelogo/leadgen-product-docs">Open on GitHub ↗</a></div>
+<div class="tree"><span class="d">leadgen-product-docs/</span>
+├─ RESOURCES.md               <span class="c"># the index of everything</span>
+├─ PRD-Map-CRM-Agent.md       <span class="c"># what we build and why</span>
+├─ FRONTEND-FEATURE-LIST.md   <span class="c"># FE-* screens</span>
+├─ COPILOT-FEATURE-LIST.md    <span class="c"># CP-* agent skills</span>
+├─ FEATURE-AREAS.md           <span class="c"># acceptance criteria A1–A12</span>
+├─ DECISION-LOG.md            <span class="c"># every product call, dated</span>
+├─ <span class="d">specs/</span>                     <span class="c"># solution designs</span>
+├─ <span class="d">customers/blake/feedback/</span>  <span class="c"># emails, tests, syncs</span>
+└─ <span class="d">daily-briefings/</span></div>
+        </div>
+        <ol class="legend plain">
+          <li><span class="k">1</span><div><b>Start here, whatever your role</b><span>The PRD, specs, feature lists, decision log and every customer conversation. Published from Jan's workspace.</span></div></li>
+          <li><span class="k">2</span><div><b>Feature lists</b><span>The <a href="https://docs.google.com/document/d/1eBZwsWq-dgNHgNxnnGHJZr-bXEd2h8AI3qgOC2xJJTU/edit?tab=t.0">Google Doc</a> is canonical; the markdown files mirror it. Blake reviews these, so they're the priority backlog.</span></div></li>
+          <li><span class="k">3</span><div><b>Customer feedback</b><span>Search <code>customers/blake/feedback/</code> before asking "what did Blake mean?".</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="repo:fe" hidden>
+      <div class="who-row"><span class="k">Fahmida · Rafa · Nirab · Lucas</span><span>Next.js · TypeScript</span><span>Vercel</span></div>
+      <div class="shot">
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">Propelogo/leadgen-frontend</span><a class="open" href="https://github.com/Propelogo/leadgen-frontend">Open on GitHub ↗</a></div>
+<div class="tree"><span class="d">leadgen-frontend/</span>
+├─ <span class="d">app/</span>          <span class="c"># one folder per screen</span>
+│  ├─ map/  crm/  callers/  calls/  campaign/
+│  ├─ copilot/  leads/  projects/  calendar/
+│  └─ admin/  signup/  login/
+├─ <span class="d">components/</span>   <span class="c"># the UI pieces</span>
+├─ <span class="d">lib/</span>          <span class="c"># filters, types, API client</span>
+├─ <span class="d">e2e/</span>          <span class="c"># Playwright tests</span>
+├─ DESIGN.md     <span class="c"># design tokens</span>
+└─ CLAUDE.md     <span class="c"># conventions</span></div>
+        </div>
+        <ol class="legend plain">
+          <li><span class="k">1</span><div><b>Every screen in chapter 3</b><span>And most product issues. <code>main</code> ships propelogo.com; <code>staging</code> ships stage.propelogo.com.</span></div></li>
+          <li><span class="k">2</span><div><b>Feature flags</b><span>Unfinished work ships dark behind a flag. What's switched on is visible at <span class="mono">/admin/flags</span>.</span></div></li>
+          <li><span class="k">3</span><div><b>Engineers: run it</b><span><code>npm install</code> · <code>npm run dev</code>, with <code>.env.local</code> values from Fahmida.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="repo:be" hidden>
+      <div class="who-row"><span class="k">Fahmida · Lucas · Nirab</span><span>Node · TypeScript · Postgres</span><span>AWS</span></div>
+      <div class="shot">
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">Propelogo/leadgen-backend</span><a class="open" href="https://github.com/Propelogo/leadgen-backend">Open on GitHub ↗</a></div>
+<div class="tree"><span class="d">leadgen-backend/</span>
+├─ <span class="d">backend/src/modules/</span>   <span class="c"># one folder per capability</span>
+│  ├─ agent/      <span class="c"># Copilot · the reference module</span>
+│  ├─ leads/  crm/  telephony/  enrichment/
+│  └─ scoring/  underwriting/  markets/
+├─ <span class="d">mcp-server/</span>   <span class="c"># read-only DB access for Claude Code</span>
+├─ <span class="d">docs/</span>         <span class="c"># ARCHITECTURE.md, ADRs</span>
+└─ CLAUDE.md</div>
+        </div>
+        <ol class="legend plain">
+          <li><span class="k">1</span><div><b>The API and the Copilot</b><span>Calling, email sending, owner lookups, scoring and valuation logic all live here.</span></div></li>
+          <li><span class="k">2</span><div><b>Two databases</b><span>Writes the app database; only reads the parcel database.</span></div></li>
+          <li><span class="k">3</span><div><b>Engineers: run it</b><span><code>cp .env.example .env</code> · <code>docker compose up</code>. Blank vendor keys keep integrations off.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="repo:pl" hidden>
+      <div class="who-row"><span class="k">Andre + data team</span><span>Python · Dagster · Snowflake</span><span>GitOps</span></div>
+      <div class="shot">
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">Propelogo/leadgen-pipeline</span><a class="open" href="https://github.com/Propelogo/leadgen-pipeline">Open on GitHub ↗</a></div>
+<div class="tree"><span class="d">leadgen-pipeline/</span>
+├─ <span class="d">taxassessor/</span>       <span class="c"># county assessor records</span>
+├─ <span class="d">power/</span>             <span class="c"># grid proximity</span>
+├─ <span class="d">machine-learning/</span>  <span class="c"># computer vision</span>
+├─ <span class="d">protobufs/</span>         <span class="c"># the shared data schema</span>
+├─ <span class="d">dagster/</span>           <span class="c"># orchestration</span>
+├─ <span class="d">devops/</span>            <span class="c"># infra as code</span>
+└─ <span class="d">docs/data/</span>         <span class="c"># 0052 tiers, landing guide</span></div>
+        </div>
+        <ol class="legend plain">
+          <li><span class="k">1</span><div><b>Where chapter 4's data comes from</b><span>Each data type gets its own collection module; all attach to the parcel by <code>parcel_id</code>.</span></div></li>
+          <li><span class="k">2</span><div><b>The worklist</b><span><a href="https://github.com/Propelogo/leadgen-pipeline/blob/main/docs/data/0052-nationwide-data-collection-tiers.md">0052 nationwide tiers</a>: which jurisdictions, in which order.</span></div></li>
+          <li><span class="k">3</span><div><b>Data lane only</b><span>Start here only if you're on Andre's lane. Engineers start at <code>docs/data/0008-data-landing-contract.md</code>.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="repo:ag" hidden>
+      <div class="who-row"><span class="k">Reference only</span><span>oak-network org</span></div>
+      <div class="shot">
+        <div class="frame">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">oak-network/leadgen-agent</span><a class="open" href="https://github.com/oak-network/leadgen-agent">Open on GitHub ↗</a></div>
+<div class="tree"><span class="d">leadgen-agent/</span>
+├─ voice agent   <span class="c"># ElevenLabs via Twilio</span>
+└─ email agent   <span class="c"># Gmail</span></div>
+        </div>
+        <ol class="legend plain">
+          <li><span class="k">1</span><div><b>The earlier voice + email agent</b><span>Reference for the voice PRD. Calling now ships in the frontend and backend, with a human always on the line.</span></div></li>
+          <li><span class="k">2</span><div><b>Don't build here</b><span>Also skip <span class="mono">leadgen-db</span> and <span class="mono">leadgen-zone-experiments</span>: early prototypes kept for history.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 HOW WE WORK -->
+<section class="chapter" id="work">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">08</div>
+      <div>
+        <span class="eyebrow">How we work</span>
+        <h2>Spec first. One issue per task. Prove it on staging.</h2>
+        <p>We write the spec and acceptance criteria before anyone builds. Every task is a GitHub issue on the board. Nothing reaches the brokers until someone has clicked it on staging. These three docs answer most "should it do X?" questions.</p>
+      </div>
+    </div>
+    <div class="grid3">
+      <a class="card first" href="https://github.com/Propelogo/leadgen-product-docs/blob/main/RESOURCES.md"><span class="order">1</span><h3>RESOURCES.md</h3><p>The index. Every spec, meeting, repo, data source and Slack decision is linked from here. Bookmark it.</p></a>
+      <a class="card" href="https://github.com/Propelogo/leadgen-product-docs/blob/main/PRD-Map-CRM-Agent.md"><span class="order">2</span><h3>PRD · Map CRM Agent</h3><p>Problem, North Star, scope, releases, October lanes. Read §0–§2 in your first week.</p></a>
+      <div class="card"><span class="order">3</span><h3>Feature list</h3><p><span class="mono">FE-*</span> screens and <span class="mono">CP-*</span> Copilot skills, each with a user story and deadline.</p>
+        <div class="links"><a href="https://docs.google.com/document/d/1eBZwsWq-dgNHgNxnnGHJZr-bXEd2h8AI3qgOC2xJJTU/edit?tab=t.0">FE tab</a><a href="https://docs.google.com/document/d/1eBZwsWq-dgNHgNxnnGHJZr-bXEd2h8AI3qgOC2xJJTU/edit?tab=t.er9q4fttomf0">CP tab</a><a href="https://github.com/Propelogo/leadgen-product-docs/blob/main/FRONTEND-FEATURE-LIST.md">FE mirror</a><a href="https://github.com/Propelogo/leadgen-product-docs/blob/main/COPILOT-FEATURE-LIST.md">CP mirror</a></div>
+      </div>
+    </div>
+    <div class="script">
+      <div>
+        <span class="eyebrow">Every issue reads like this</span>
+        <blockquote>"As a <mark>realtor</mark>, I want to <mark>log a call outcome in one tap</mark> so that <mark>the lead comes back on the right day</mark>."</blockquote>
+        <div class="ask">Link the spec. Link related issues. Assign the owner + Jan.</div>
+      </div>
+      <div>
+        <span class="eyebrow">Acceptance criteria, as checkboxes</span>
+        <ul>
+          <li>Each outcome sets the matching CRM status</li>
+          <li>Callback creates a calendar entry for the chosen time</li>
+          <li>Do not call removes the owner from every queue</li>
+          <li>Works on desktop and the iPhone app</li>
+        </ul>
+        <p style="margin-top:16px;font-size:14px;color:var(--muted)">Mobile and web parity is the default. If the criteria can't be checked on staging, the issue isn't done.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:24px">
+      <span class="eyebrow">How a change reaches the brokers</span>
+      <div class="pipeline" style="margin-top:14px">
+        <button class="token" type="button" aria-hidden="true" tabindex="-1"></button>
+        <div><b>Spec</b><span>Problem, user story, acceptance criteria.</span></div>
+        <div><b>Issue</b><span>On the board, one owner, linked to the spec.</span></div>
+        <div><b>Build</b><span>A branch off <code>staging</code> and a PR, reviewed.</span></div>
+        <div><b>Staging</b><span>Clicked on stage.propelogo.com; criteria ticked.</span></div>
+        <div><b>Production</b><span>Promoted to propelogo.com; Fahmida or Lucas approves.</span></div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:24px">
+      <div class="card dispo" id="guard">
+        <span class="eyebrow" style="margin:0">Guardrails · real owners are on the other end</span>
+        <div><span class="eyebrow">Always</span><div class="pills"><span class="pill g">Test inboxes + test numbers only</span><span class="pill g">Passwords by DM or 1Password</span><span class="pill g">An issue for every task</span><span class="pill g">Spec before build</span></div></div>
+        <div><span class="eyebrow">Ask first</span><div class="pills"><span class="pill o">Any send to a real owner</span><span class="pill o">A new paid vendor</span><span class="pill o">Recorded or AI calls</span><span class="pill o">Contacting Blake directly</span></div></div>
+        <div><span class="eyebrow">Never</span><div class="pills"><span class="pill r">Push straight to main or staging</span><span class="pill r">Share keys in GitHub or Slack</span><span class="pill r">Robot voicemail without consent</span><span class="pill r">Scrape phone numbers</span></div></div>
+      </div>
+      <div class="card">
+        <span class="eyebrow">Calling and the TCPA (US robocall law), in plain words</span>
+        <div class="tcpa">
+          <div class="y"><em>OK</em><span>A human calls and, at voicemail, speaks a message.</span></div>
+          <div class="y"><em>OK</em><span>Parallel dial, 3–5 lines: the first person who answers gets a human.</span></div>
+          <div class="x"><em>No</em><span>A pre-recorded, cloned or AI voicemail to a cell without prior consent. Ringless voicemail is <b>parked</b> for this reason.</span></div>
+          <div class="x"><em>No</em><span>Cranking to 10 lines. Carriers flag the number as spam and pickup dies.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 TEAM -->
+<section class="chapter" id="team">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">09</div>
+      <div>
+        <span class="eyebrow">October lanes · locked 6 Oct</span>
+        <h2>One owner, one backlog per lane.</h2>
+        <p>Ask the lane owner first. Jan owns scope and priority; Saquib sponsors the product and sets strategy. Most conversation happens in <span class="mono">#leadgen-product</span> on Slack.</p>
+      </div>
+    </div>
+    <div class="role-grid">
+      <article class="role" style="--rc: var(--ink)">
+        <header><span class="av">JV</span><div><b>Jan</b><span>PM · scope and priority</span></div><em>Start here</em></header>
+        <div class="minibar"><i class="on">product-docs</i><i>board</i></div>
+        <ul><li>"Is this a ticket?" and "which first?"</li><li>Specs, acceptance criteria, PRD</li><li>Customer context: Blake, Davis</li></ul>
+        <footer>Assigned on every issue</footer>
+      </article>
+      <article class="role" style="--rc: var(--cobalt)">
+        <header><span class="av">FA</span><div><b>Fahmida</b><span>Call loop · deal pipeline</span></div></header>
+        <div class="minibar"><i class="on">frontend</i><i class="on">backend</i></div>
+        <ul><li>CRM, dialer, call queue</li><li>Staging access and app accounts</li><li>Approves production releases</li></ul>
+        <footer>First stop for "how do I…"</footer>
+      </article>
+      <article class="role" style="--rc: var(--data)">
+        <header><span class="av">LU</span><div><b>Lucas</b><span>Agent · cost · leasing tool</span></div></header>
+        <div class="minibar"><i class="on">backend</i><i>frontend</i></div>
+        <ul><li>Copilot and its eval prompts</li><li>LLM and vendor cost</li><li>Leasing tool</li></ul>
+        <footer>Ask before adding a paid vendor</footer>
+      </article>
+      <article class="role" style="--rc: var(--warn)">
+        <header><span class="av">AF</span><div><b>Andre</b><span>Data</span></div></header>
+        <div class="minibar"><i class="on">pipeline</i></div>
+        <ul><li>Collection, QC, Foundation + Florida</li><li>AWS and secrets</li><li>Anything about parcel data quality</li></ul>
+        <footer>Owns the 0052 worklist</footer>
+      </article>
+      <article class="role" style="--rc: var(--ok)">
+        <header><span class="av">RG</span><div><b>Rafa</b><span>Map · UI/UX · Titan setup</span></div></header>
+        <div class="minibar"><i class="on">frontend</i><i>design</i></div>
+        <ul><li>Map Explorer and the design system</li><li>Titan brokerage site and org setup</li><li>Light and dark, desktop and mobile</li></ul>
+        <footer>Corridors with Fahmida</footer>
+      </article>
+      <article class="role" style="--rc: var(--err)">
+        <header><span class="av">NI</span><div><b>Nirab</b><span>Email loop · newsletter</span></div></header>
+        <div class="minibar"><i class="on">frontend</i><i class="on">backend</i></div>
+        <ul><li>Bulk send from a saved view</li><li>Inbox placement testing</li><li>Replies landing in the CRM</li></ul>
+        <footer>Email tests use test inboxes only</footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 10 WEEK ONE -->
+<section class="chapter" id="week">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">10</div>
+      <div>
+        <span class="eyebrow">Your first week</span>
+        <h2>By Friday, you can explain the loop to someone else.</h2>
+        <p>Works for any role. Tick these off as you go; your ticks are saved in this browser.</p>
+      </div>
+    </div>
+    <ol class="rhythm" id="rhythm">
+      <li><span class="when">Day 1</span><input type="checkbox" id="w1"><label for="w1"><b>Get your accounts</b><span>Slack <span class="mono">#leadgen-product</span> and GitHub (Propelogo org) from Jan; a staging login from Fahmida. Engineers: AWS from Andre.</span></label></li>
+      <li><span class="when">Day 1</span><input type="checkbox" id="w2"><label for="w2"><b>Read the realtor field guide</b><span>Fifteen minutes, screen by screen. It's the product as the user sees it.</span></label></li>
+      <li><span class="when">Day 2</span><input type="checkbox" id="w3"><label for="w3"><b>Click the loop on staging</b><span>Corridor → Add all to CRM → Find owners → Call queue. Write down three things that confused you.</span></label></li>
+      <li><span class="when">Day 2</span><input type="checkbox" id="w4"><label for="w4"><b>Read RESOURCES.md and the PRD, §0–§2</b><span>Then the feature-list rows for the area you'll work on.</span></label></li>
+      <li><span class="when">Day 3</span><input type="checkbox" id="w5"><label for="w5"><b>Read the last two Blake sync summaries</b><span>In <span class="mono">customers/blake/feedback/meetings/</span>. That's what the customer is asking for this week.</span></label></li>
+      <li><span class="when">Day 3</span><input type="checkbox" id="w6"><label for="w6"><b>Meet your lane owner</b><span>Agree your first issue with Jan: small, with acceptance criteria and a linked spec.</span></label></li>
+      <li><span class="when">Day 4</span><input type="checkbox" id="w7"><label for="w7"><b>Engineers: run the app locally</b><span>Frontend and backend from chapter 7; read both <code>CLAUDE.md</code> files. Everyone else: skim the board for your lane.</span></label></li>
+      <li><span class="when">Day 5</span><input type="checkbox" id="w8"><label for="w8"><b>Post your end-of-week line</b><span>In <span class="mono">#leadgen-product</span>: what's clear, what's blocked, what you need, and from whom.</span></label></li>
+    </ol>
+    <div class="progress-line" id="rhythm-progress"></div>
+
+    <h2 style="margin-top:72px;font-size:32px">Words you'll hear</h2>
+    <dl class="gloss">
+      <div><dt>Parcel</dt><dd>One property lot: its outline plus IDs. Every other piece of data attaches to it.</dd></div>
+      <div><dt>Corridor · saved view</dt><dd>A ready-made cluster of industrial parcels along a road or in a park. Effectively a call list.</dd></div>
+      <div><dt>Gates</dt><dd>Five checks a parcel must pass: zoning, residential neighbor, environmental, flood, paved yard.</dd></div>
+      <div><dt>Engine valuation</dt><dd>Our estimate: building and yard rent capitalized at a market cap rate.</dd></div>
+      <div><dt>Paved yard · impervious</dt><dd>The hard surface outside the building, measured from aerial imagery. Where the value is.</dd></div>
+      <div><dt>Owner behind the LLC</dt><dd>The real person who controls an entity owner, found through state registries and lookups.</dd></div>
+      <div><dt>Skip-trace</dt><dd>A paid lookup for an owner's phone numbers and emails.</dd></div>
+      <div><dt>Parallel dialing</dt><dd>Ringing several owners at once and connecting the caller to the first who answers.</dd></div>
+      <div><dt>Foundation tier</dt><dd>The first data sweep in each state: places with ≥ 25k people or ≥ 5k industrial jobs.</dd></div>
+      <div><dt>Staging</dt><dd>The shared test version of the app, with its own data. Changes are proven here before production.</dd></div>
+      <div><dt>Campaign</dt><dd>An outreach send, by email or calls, to a set of owners. We never say "project" for this.</dd></div>
+      <div><dt>Interface</dt><dd>The agreed API or data shape between two pieces of software. "Contract" always means legal.</dd></div>
+    </dl>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Propelogo team field guide · October 2026. Sources: PRD, RESOURCES.md, realtor field guide, repo READMEs.</span>
+    <span>Questions? Jan for product, Fahmida for the app, your lane owner for everything else.</span>
+  </div>
+</footer>
+
+<div class="themeask" id="themeask" hidden role="dialog" aria-modal="true" aria-labelledby="themeask-t">
+  <div class="box">
+    <span class="eyebrow">Before you start</span>
+    <h2 id="themeask-t">What do you prefer, light or dark?</h2>
+    <p>Pick how you'd like to read the guide.</p>
+    <div class="opts">
+      <button type="button" class="opt light" data-pick="light"><div class="prev"><i class="h"></i><i class="b"></i><i class="c"></i><i class="k"></i></div><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Light</b></button>
+      <button type="button" class="opt dark" data-pick="dark"><div class="prev"><i class="h"></i><i class="b"></i><i class="c"></i><i class="k"></i></div><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>Dark</b></button>
+    </div>
+    <small>You can switch any time with the sun and moon at the top right.</small>
+  </div>
+</div>
+
+<script>
+(() => {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hasIO = "IntersectionObserver" in window;
+
+  // Theme: ask once, then a toggle in the top bar
+  const KEY = "pg-team-guide-theme";
+  const setTheme = (t, save) => {
+    if (t === "dark") document.documentElement.setAttribute("data-gtheme", "dark");
+    else document.documentElement.removeAttribute("data-gtheme");
+    document.querySelectorAll(".themebtn button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.set === t)));
+    if (save) { try { localStorage.setItem(KEY, t); } catch (e) {} }
+  };
+  let saved = null, storageOk = true;
+  try { saved = localStorage.getItem(KEY); } catch (e) { storageOk = false; }
+  setTheme(saved === "dark" ? "dark" : "light", false);
+  document.querySelectorAll(".themebtn button").forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.set, true)));
+  const ask = document.getElementById("themeask");
+  if (storageOk && !saved) {
+    const close = (t) => { setTheme(t, true); ask.hidden = true; };
+    setTimeout(() => { ask.hidden = false; ask.querySelector('[data-pick="light"]').focus(); }, 700);
+    ask.querySelectorAll("[data-pick]").forEach((b) => {
+      b.addEventListener("mouseenter", () => setTheme(b.dataset.pick, false));
+      b.addEventListener("focus", () => setTheme(b.dataset.pick, false));
+      b.addEventListener("click", () => close(b.dataset.pick));
+    });
+    ask.addEventListener("click", (e) => { if (e.target === ask) close("light"); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !ask.hidden) close("light"); });
+  }
+
+  // Pins ↔ legend ↔ diagram nodes
+  document.querySelectorAll("[data-hotspots]").forEach((shot) => {
+    const keys = [...shot.querySelectorAll(".pin")].map((p) => p.dataset.k);
+    const set = (k) => shot.querySelectorAll("[data-k]").forEach((el) => el.classList.toggle("on", el.dataset.k === k));
+    let idx = 0, auto = !reduce, timer = null, visible = false;
+    const tick = () => { if (!auto || !visible) return; set(keys[idx % keys.length]); idx += 1; timer = setTimeout(tick, 3200); };
+    const manual = (k) => { auto = false; clearTimeout(timer); set(k); };
+    shot.querySelectorAll(".pin, .node[data-k], .lane[data-k]").forEach((el) => el.addEventListener("click", (e) => { e.stopPropagation(); manual(el.dataset.k); }));
+    shot.querySelectorAll(".legend li[data-k]").forEach((li) => {
+      li.addEventListener("mouseenter", () => { if (!auto) set(li.dataset.k); });
+      li.addEventListener("click", () => manual(li.dataset.k));
+    });
+    set(keys[0]);
+    if (hasIO && !reduce) new IntersectionObserver((es) => es.forEach((e) => { visible = e.isIntersecting; clearTimeout(timer); if (visible) tick(); }), { threshold: 0.35 }).observe(shot);
+  });
+
+  // Tabs with a sliding pill
+  document.querySelectorAll("[data-tabs]").forEach((tabs) => {
+    const group = tabs.dataset.tabs;
+    const pill = document.createElement("span"); pill.className = "tpill"; tabs.prepend(pill);
+    const btns = [...tabs.querySelectorAll("button")];
+    const place = (b) => { pill.style.left = b.offsetLeft + "px"; pill.style.top = b.offsetTop + "px"; pill.style.width = b.offsetWidth + "px"; pill.style.height = b.offsetHeight + "px"; };
+    const select = (b) => {
+      btns.forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+      document.querySelectorAll(`[data-panel^="${group}:"]`).forEach((p) => { p.hidden = p.dataset.panel !== `${group}:${b.dataset.tab}`; });
+      place(b);
+    };
+    btns.forEach((b) => b.addEventListener("click", () => select(b)));
+    tabs.addEventListener("keydown", (e) => {
+      const i = btns.findIndex((b) => b.getAttribute("aria-selected") === "true");
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const n = btns[(i + (e.key === "ArrowRight" ? 1 : btns.length - 1)) % btns.length]; select(n); n.focus(); }
+    });
+    requestAnimationFrame(() => place(btns.find((b) => b.getAttribute("aria-selected") === "true")));
+    window.addEventListener("resize", () => place(btns.find((b) => b.getAttribute("aria-selected") === "true")));
+  });
+
+  // Copy buttons on terminal commands
+  document.querySelectorAll(".term .ln .cmd").forEach((cmd) => {
+    const btn = document.createElement("button"); btn.type = "button"; btn.className = "copy"; btn.textContent = "copy";
+    btn.addEventListener("click", () => {
+      navigator.clipboard && navigator.clipboard.writeText(cmd.textContent).then(() => {
+        btn.textContent = "copied"; btn.classList.add("done");
+        setTimeout(() => { btn.textContent = "copy"; btn.classList.remove("done"); }, 1400);
+      });
+    });
+    cmd.parentElement.appendChild(btn);
+  });
+
+  // A token travels each pipeline while it's on screen
+  document.querySelectorAll(".pipeline").forEach((pl) => {
+    const stages = [...pl.querySelectorAll(":scope > div")], token = pl.querySelector(".token");
+    if (!token) return;
+    if (reduce) { stages.forEach((s) => s.classList.add("done")); return; }
+    let i = 0, timer = null;
+    const step = () => {
+      stages.forEach((s, j) => { s.classList.toggle("done", j < i); s.classList.toggle("at", j === i); });
+      token.style.left = stages[i].offsetLeft + "px";
+      i = (i + 1) % stages.length;
+      timer = setTimeout(step, i === 0 ? 2600 : 1500);
+    };
+    if (hasIO) new IntersectionObserver((es) => es.forEach((e) => { clearTimeout(timer); if (e.isIntersecting) step(); }), { threshold: 0.4 }).observe(pl);
+    else step();
+  });
+
+  // Access flow and guardrail pills light up in sequence
+  const sequence = (root, sel, cls, ms) => {
+    if (!root || reduce || !hasIO) return;
+    const items = [...root.querySelectorAll(sel)]; let i = 0, timer = null;
+    const run = () => { items.forEach((el) => el.classList.remove(cls)); items[i % items.length].classList.add(cls); i += 1; timer = setTimeout(run, ms); };
+    new IntersectionObserver((es) => es.forEach((e) => { clearTimeout(timer); if (e.isIntersecting) run(); else items.forEach((el) => el.classList.remove(cls)); }), { threshold: 0.4 }).observe(root);
+  };
+  sequence(document.getElementById("guard"), ".pill", "blink", 650);
+
+  // Week-one checklist, saved in this browser
+  const RK = "pg-team-guide-week";
+  const boxes = [...document.querySelectorAll("#rhythm input")];
+  const prog = document.getElementById("rhythm-progress");
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(RK) || "{}"); } catch (e) {}
+  const paint = () => {
+    const n = boxes.filter((b) => b.checked).length;
+    prog.innerHTML = n === boxes.length ? "<b>All done.</b> Ship the next one." : `<b>${n} of ${boxes.length}</b> done`;
+  };
+  boxes.forEach((b) => {
+    b.checked = !!state[b.id]; b.closest("li").classList.toggle("done", b.checked);
+    b.addEventListener("change", () => {
+      state[b.id] = b.checked; b.closest("li").classList.toggle("done", b.checked);
+      try { localStorage.setItem(RK, JSON.stringify(state)); } catch (e) {}
+      paint();
+    });
+  });
+  paint();
+
+  // Scroll progress, active nav link, rail stops
+  const bar = document.querySelector(".bar");
+  const chapters = [...document.querySelectorAll(".chapter")];
+  const navLinks = [...document.querySelectorAll(".bar nav a")];
+  const railItems = [...document.querySelectorAll(".rail li")];
+  const onScroll = () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.setProperty("--progress", h > 0 ? Math.min(1, scrollY / h) : 0);
+    let cur = -1;
+    chapters.forEach((c, i) => { if (c.getBoundingClientRect().top < innerHeight * 0.4) cur = i; });
+    navLinks.forEach((a, i) => a.classList.toggle("on", i === cur));
+    railItems.forEach((li, i) => { li.classList.toggle("reached", i <= cur); li.classList.toggle("passed", i < cur); });
+  };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // Reveal content that starts below the fold
+  if (hasIO && !reduce) {
+    const targets = document.querySelectorAll(".chapter-head, .shot, .flow, .ladder, .card, .role-grid, .rhythm, .gloss, .script, .tabrow");
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.remove("pre"); io.unobserve(e.target); } }), { threshold: 0.12 });
+    targets.forEach((t) => { if (t.getBoundingClientRect().top > innerHeight) { t.classList.add("pre", "reveal"); io.observe(t); } });
+  }
+})();
+</script>
+</body>
+</html>
