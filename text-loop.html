@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Text loop — Propelogo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<style>
+:root {
+  --bg: #ffffff; --ground: #f4f6fa; --ink: #0c1424; --body: #414b5e; --muted: #606a7d;
+  --line: #e1e6ef; --line-soft: #eaeef5;
+  --cobalt: #2340f5; --cobalt-fill: #2340f5; --cobalt-soft: #eef1ff;
+  --ok: #187a42; --ok-soft: #e7f6ec; --warn: #a35f00; --warn-soft: #fdf3e1;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "Geist", -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #16181d; color: var(--body); font-family: var(--font-sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: var(--cobalt); }
+.desk { padding: 32px 20px 64px; }
+.board {
+  max-width: 920px; margin: 0 auto; background: var(--bg); color: var(--body);
+  border-radius: 4px; padding: 36px 40px 32px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+}
+.eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: 40px; letter-spacing: -0.02em; color: var(--ink); margin: 8px 0 10px; line-height: 1.05; }
+.lede { margin: 0; max-width: 62ch; font-size: 15px; }
+.meta { display: flex; flex-wrap: wrap; gap: 22px; margin: 18px 0 28px; }
+.meta div { min-width: 140px; }
+.meta b { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; color: var(--muted); }
+.meta span { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.node, .diamond span {
+  font-family: var(--font-sans); font-size: 13.5px; font-weight: 500; color: var(--ink);
+  background: #fff; border: 1.5px solid #cfd6e4; border-radius: 10px;
+  padding: 10px 14px; text-align: center; line-height: 1.3;
+}
+.node.built { border-color: #b7c4ee; background: var(--cobalt-soft); }
+.node.end { background: #1a2744; color: #fff; border-color: #1a2744; border-radius: 999px; }
+.node.gap { background: var(--warn-soft); border-color: #ead7b0; }
+.diamond { width: 148px; height: 148px; display: grid; place-items: center; margin: 4px 0; }
+.diamond span {
+  width: 104px; height: 104px; display: grid; place-items: center;
+  transform: rotate(45deg); border-radius: 12px; background: #fff6ea; border-color: #e4c48a; padding: 8px;
+}
+.diamond span em { transform: rotate(-45deg); font-style: normal; display: block; max-width: 78px; }
+.arrow { width: 1.5px; height: 22px; background: #9aa6bd; position: relative; }
+.arrow::after { content: ""; position: absolute; left: -3.5px; bottom: -1px; border: 4px solid transparent; border-top-color: #9aa6bd; }
+.branch { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; width: 100%; margin-top: 8px; }
+.col { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.tag { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin: 2px 0 6px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; color: var(--ink); margin: 36px 0 6px; }
+.sub { margin: 0 0 14px; font-size: 14px; }
+.foot { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); }
+.foot h3 { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; color: var(--muted); margin: 0 0 6px; }
+.foot p { margin: 0; font-size: 13px; }
+@media (max-width: 720px) {
+  .board { padding: 24px 16px; }
+  h1 { font-size: 32px; }
+  .branch, .foot { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="desk">
+<article class="board">
+  <p class="eyebrow">Journey · Text loop</p>
+  <h1>Text loop</h1>
+  <p class="lede">After a call, the user clicks Send SMS on the CRM lead. A reply, a mass text, and a subscribe text start somewhere else.</p>
+  <div class="meta">
+    <div><b>Who</b><span>Broker or caller</span></div>
+    <div><b>Goal</b><span>Send the right text, or none</span></div>
+    <div><b>Entry</b><span>Call ended</span></div>
+  </div>
+
+  <div class="flow">
+    <div class="node built">Call ended</div>
+    <div class="arrow"></div>
+    <div class="diamond"><span><em>Outcome?</em></span></div>
+  </div>
+
+  <div class="branch">
+    <div class="col">
+      <div class="tag">interested</div>
+      <div class="arrow"></div>
+      <div class="node gap">Click Send SMS</div>
+      <div class="arrow"></div>
+      <div class="node">Davis, number, site</div>
+    </div>
+    <div class="col">
+      <div class="tag">no answer</div>
+      <div class="arrow"></div>
+      <div class="node gap">Click Send SMS</div>
+      <div class="arrow"></div>
+      <div class="node">Who, why, how to reach you</div>
+      <div class="arrow"></div>
+      <div class="node built">Email, same time</div>
+    </div>
+    <div class="col">
+      <div class="tag">callback · wrong number · DNC</div>
+      <div class="arrow"></div>
+      <div class="node end">No text</div>
+    </div>
+  </div>
+
+  <h2>Seller texts back</h2>
+  <p class="sub">The reply is matched to the property on that send.</p>
+  <div class="flow">
+    <div class="node gap">Reply arrives</div>
+    <div class="arrow"></div>
+    <div class="node gap">Match phone to property</div>
+    <div class="arrow"></div>
+    <div class="node gap">Agent handles the reply</div>
+    <div class="arrow"></div>
+    <div class="node gap">Notify Davis, draft an email</div>
+  </div>
+  <div class="row" style="margin-top:14px">
+    <div class="node end">STOP</div>
+    <div class="node">Opt out</div>
+  </div>
+
+  <h2>Mass SMS</h2>
+  <p class="sub">No call. One generic text. Its own 10DLC campaign.</p>
+  <div class="flow">
+    <div class="node gap">One approved text</div>
+    <div class="arrow"></div>
+    <div class="node gap">Titan link</div>
+    <div class="arrow"></div>
+    <div class="node gap">Reply or click</div>
+    <div class="arrow"></div>
+    <div class="node gap">Then personalize</div>
+  </div>
+
+  <h2>Subscribe</h2>
+  <p class="sub">Named on the text-loop call. Not live.</p>
+  <div class="node gap">Ask to subscribe</div>
+
+  <div class="foot">
+    <div>
+      <h3>In the product</h3>
+      <p>Call, Email, and Mail on the lead. Text in the bulk bar sets the next action. An SMS row can show on the timeline.</p>
+    </div>
+    <div>
+      <h3>Not built</h3>
+      <p>Click Send SMS. Matching a reply to a property. The mass text. Subscribe.</p>
+    </div>
+  </div>
+</article>
+</div>
+</body>
+</html>
